@@ -1,34 +1,36 @@
 \chapter{Einleitung}
+\label{chap:einleitung}
 
-  Sed turpis erat (Abbildung \ref{Sprungmarke1}), tincidunt eu sollicitudin eu, tempus quis lectus. Nullam orci leo, tempus vitae dictum eu, bibendum at ante. In placerat, mi eu consequat suscipit, turpis arcu dictum tellus, nec scelerisque turpis eros a enim. Mauris quis leo lacus. Vestibulum condimentum porttitor malesuada. Pellentesque nec dictum nisl. Donec eleifend libero sit amet urna dignissim in faucibus lorem ultricies. Vestibulum interdum egestas metus vel porta. In vehicula leo at nibh dignissim malesuada. Etiam non nunc ligula. Vivamus vitae nibh dolor, eget faucibus tortor. Suspendisse ac quam enim. 
+In dieser Arbeit soll, mit Hilfe einer Simulation, untersucht werden, wie gut sich Kameras bei der Standortbestimmung in mobilen Roboter einsetzten lassen. Anlass dieser Arbeit war eine Anfrage der Künstlergruppe \ac{BBM}, die schon bei mehreren Ausstellungen/Performances\footnote{unter Anderem:
+  
+  2000 Themenpark "Wissen" der Expo 2000 Hannover
+  
+  2010 Joybots  in der BMW-Welt 
+  
+  2012 EPKOT Experimental Prototype Killers of Tomorrow , Hannover
+  
+  siehe auch \url{ http://www.bbm.cfnt3.de}} mobile Roboter eingesetzt haben. Dabei interessierten sie sich für eine Lokalisierungslösung welche möglichst ohne weitere spezial Hardware und geringem Installationsaufwand vor Ort auskommt. Der Ansatz der daraus entstand war: die Kameras, die bereits an jedem der Roboter verbaut waren, zu nutzen um markante Muster in der Bühneninstallation zu erkennen und gemeinsam mit den Odometrie-Daten zur Positionsberechnung zu verwenden. Dabei sollte ein Partikelfilter als Zustandsschätzer verwendet werden. Zu der Bühneninstallation gehören große Lichtwände, zu sehen auf Abbildung \ref{fig:RobotAndGuests} und \ref{fig:RobotAndLightwall}. Auf diese Lichtwände könnte ein hell/dunkel Bit-Muster angezeigt werden das es mit Hilfe geeigneter Bildverarbeitungsalgorithmen und mit den Kameras zu erkennen gilt.
 
+  \begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth]{chapter1/roboterAndLightwallOnEPKOT2.png}
+    \caption[Roboter und Besucher auf der EPKOT]{Roboter und Besucher auf der EPKOT Quelle: http://www.bbm.cfnt3.de}
+    \label{fig:RobotAndGuests}
+    \bigskip 
+    \includegraphics[width=\textwidth]{chapter1/roboterAndLightwallOnEPKOT.png}
+    \caption[Roboter vor Lichtwand auf der EPKOT]{Roboter vor Lichtwand auf der EPKOT Quelle: http://www.bbm.cfnt3.de}
+    \label{fig:RobotAndLightwall}
+  \end{figure}
+  
+  \section{Ziel und Aufgabenstellung der Arbeit}
+Im Rahmen dieser Arbeit soll eine Simulationsumgebung mit Hilfe geeigneter 3D-Visualisierungs Bibliotheken erstellt werden. Die in der Lage ist eine 3D-Szene der Bühne zu Simuliert und Kamerabilder sowie Odometrie-Daten einer Roboterfahrt zu erzeugen. Außerdem soll ein Lokalisationsalgorithmus entwickelt werden, der auf Grundlage dieser Daten die Position und Orientierung des Roboters auf der Bühne schätzen kann. Anschließend soll die Qualität dieser geschätzten Position beurteilt werden.     
+
+  \section{Gliederung}
+Die Arbeit wird im folgenden Kapitel eine Übersicht über gängige Lokalisationsverfahren sowie ihre Vor- und Nachteile geben. Anschließend wird die Simulations- und Lokalisationssoftware vorgestellt und deren Implementation erklärt und begründet. In Kapitel \ref{chap:versuchsdurchfhrung} beginnt die Beschreibung verschiedene Versuche die zum Beurteilen der Lokalisationsergebnisse durchgeführt werden sollen. Danach werden die Ergebnisse dieser Versuche vorgestellt und in Kapitel \ref{chap:disskussiondermessergebnisse} Diskutiert.
+Abschließend wird ein Ausblick zur möglichen Anwendung dieses Verfahrens gegeben und ein Fazit gezogen.
   \begin{figure}[htbp]
     \centering
     \input{chapter1/loca_plot.tex}
     \caption{Bildbeschreibung}	
     \label{Sprungmarke1}
   \end{figure}
-
-  Curabitur vitae velit nisl, vel sagittis arcu. Nullam sit amet ligula ut nibh ornare tempor. Pellentesque sollicitudin convallis dolor, eget pulvinar augue tempus sit amet. Aenean lacinia condimentum commodo. Pellentesque vestibulum mauris in orci sodales vitae tristique nulla tincidunt. Aenean tincidunt interdum est, a aliquet quam sollicitudin vel. Donec et lacus lorem. Nunc odio est, volutpat non rhoncus eu, dictum ut turpis. Fusce posuere rhoncus ipsum, nec pharetra nunc posuere bibendum. Morbi eu venenatis tortor.
-
-
-  \section{Ziel und Aufgabenstellung der Arbeit}
-
-  \begin{wrapfigure}{r}{5cm}
-    \centering
-    \includegraphics{chapter1/Logo_ComTec}
-    \caption[Von Text umflossenes Bild]{Wrapfigure}
-    \label{fig:Wrap}
-  \end{wrapfigure}
-
-    Curabitur molestie egestas congue. Suspendisse erat urna, euismod at vulputate sit amet, scelerisque in arcu. Nam in est ac neque tristique mollis sit amet ac eros. Mauris felis ipsum, tincidunt at aliquam vel, faucibus vitae velit. Proin suscipit viverra vulputate. Nullam dignissim porttitor diam quis dictum. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras nulla urna, consectetur vitae laoreet ac, hendrerit in odio. Cras pellentesque luctus luctus. Donec ante nibh, dignissim ac semper sit amet, dictum eget libero. Donec elementum urna nec nisl feugiat et feugiat odio malesuada. Pellentesque pellentesque, leo in pharetra congue, leo augue bibendum leo, adipiscing aliquam sapien tellus eget odio. Cras et quam sed nibh iaculis convallis vitae nec est.
-
-
-  \section{Lösungsweg der Aufgabenstellung}
-
-    Cras pharetra rhoncus lacinia. Donec suscipit mattis arcu, sed mollis leo elementum vitae. Nam hendrerit, metus vitae ullamcorper pulvinar, neque velit aliquet massa, nec rhoncus neque erat at est. Proin ac lectus sit amet massa aliquam auctor. Phasellus non purus ac ante volutpat lacinia. Suspendisse ullamcorper libero nec libero auctor vulputate pretium arcu fermentum. Etiam vitae eros vitae justo viverra tempor. Quisque mauris mauris, dignissim non cursus tincidunt, ullamcorper sit amet nisi. Etiam tempor tellus et odio posuere ullamcorper. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam id nisi a augue commodo hendrerit. Maecenas arcu arcu, interdum pretium pulvinar vel, aliquam sed nisl. Nam sodales nulla nec massa mattis cursus. Sed vel fermentum nisi. Aliquam tristique sagittis sem, non pharetra ante auctor et. Phasellus vestibulum velit sed ipsum ullamcorper sit amet faucibus felis adipiscing. Nullam nec metus sit amet felis sodales blandit sed a neque. Ut sed erat a neque aliquet semper. Vestibulum id massa ut nulla posuere blandit id ut diam.
-
-
-  \section{Gliederung}
-
-    Nunc vitae tortor posuere ante viverra sollicitudin. Phasellus vestibulum est quis libero tincidunt lobortis. Suspendisse potenti. Pellentesque sit amet nisi id turpis pellentesque sodales. Morbi dui lectus, posuere ut adipiscing non, consectetur vitae odio. Fusce ut urna metus, quis tristique urna. Nunc faucibus euismod dui egestas sagittis. Aenean eu mauris ut libero adipiscing fermentum. Sed vitae lectus turpis, quis porta nisi. Vestibulum vel tortor sit amet urna bibendum scelerisque vel eu est. Suspendisse potenti. Nam odio tellus, consequat vitae faucibus quis, tincidunt at mi. Aliquam ut turpis lorem. Sed ut urna sit amet risus scelerisque consectetur. Donec porta aliquam est, quis iaculis nisl sagittis consequat. Curabitur in orci nisi. Nullam ipsum elit, convallis eget interdum at, imperdiet ut ligula.
