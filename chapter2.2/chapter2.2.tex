@@ -31,7 +31,9 @@ Auf jedem Segment sind 8 x 8 Bits unter gebracht. Das macht eine Kantenlänge von
 \end{description}
 
 \subsection{Messen in der Simulation}
+\label{subsec:MessenInDerSimulation}
+Die Simulation soll, neben der Visualisierung, Messungen liefern um den Lokalisationsalgorythmus testen zu können. Anders als bei Messungen an realen Experimenten hat man in der Simulation den Vorteil, alle das Messergebnis beeinflussenden Faktoren unter Kontrolle zu haben. Möchte man also, dass Messungen eine systematische Abweichung aufweisen, muss diese in der Simulation definiert werden. Genau so verhält es sich mit statistischen Abweichungen. Es lassen sich also schnell die Messunsicherheiten der Simulierten Vorgänge anpassen. Beim Debugging und Funktionstest des Lokalisationsalgorythmus wurde die Unsicherheit zum Beispiel zeitweise entfernt.
 
 \section{Lokalisation}
 \label{sec:lokalisation}
-
+Die Lokalisation ist als eine Klasse implementiert 
