@@ -1,8 +1,18 @@
 \chapter{Grundlagen}
 \label{chap:grundlagen}
-@@@@@
-\subsection{Übliche Lokalisationsverfahren}
+Die Lokalisation ist eines der Grundprobleme das beim Einsatz von mobilen Robotern auftritt. In \cite[Seite 193]{Thrun2006} wird die Lokalisation in drei Teilprobleme zerlegt:
+\begin{description}
+\item[Position Tracking] bezeichnet den Vorgang, bei dem mit bekannter Ausgangsposition diese mit Hilfe von Sensordaten bei Bewegungen verfolgt werden kann. Dabei spielt das Dynamikmodell des Roboters sowie darin modellierte Unsicherheiten eine wichtige Rolle. Denn bewegt sich der Roboter von einer bekannten Position aus, wird mit dem Dynamikmodell seine neue Position geschätzt. Bekannte Unsicherheiten des Modells erzeugen eine Wahrscheinlichkeitsverteilung um diese neue Position, in der sich die wahre Position befinden sollte. Ohne Messungen von weiteren Sensoren die Rückschlüsse auf die Umgebung erlauben, würde die Positionsschätzung mit der Zeit immer ungenauer. Mit Hilfe eines Messmodells lässt sich beurteilen, ob eine Messung an einer Bestimmten Position wahrscheinlich erscheint, oder nicht. Dadurch lässt sich die Wahrscheinlichkeitsverteilung der Position nach einer Bewegung durch eine Messung wieder eingrenzen. Auf den Bereich, in dem der Messwert des Sensors am Wahrscheinlichsten ist.
+\item[Global Localization] ist das finden der Anfangsposition des Roboters unter allen Möglichen Posen die im Szenario vorkommen können. Im Vergleich zum \textit{Position Tracking}, bei dem es genügte die Unsicherheit um die geschätzte neue Pose zu berücksichtigen, umfasst hier der Raum möglicher Posen ein erheblich größeres Volumen. Ein Ansatz wäre alle möglichen Posen mit der selben Wahrscheinlichkeit anzunehmen, und mit den ersten Messungen und dem Messmodell diese einzugrenzen. Auf Bereiche in denen diese Messungen mit hoher Wahrscheinlichkeit auftritt. 
+\item[Kidnapped Robot Problem] ist eine verschärfte Variante des \textit{Global Localization} Problems. Dabei geht man davon aus, das sich der Roboter spontan an einem anderen Ort aufhält als vom Roboter angenommen. Nun müsste die Lokalisation des Roboters wieder im gesamten möglichen Raum erfolgen. Nur das der Roboter diesen Zustand nicht feststellen kann. 
+\end{description}
 
+Bayes Filter --> Markov Localization -->
+\begin{description}
+\item[Kalman Filter] EKF, UKF
+\item[Partikel Filter] Sequenzielle Monte-Carlo-Methode
+\item[Grid-Based-Filter] Histogram Filter (continous Space), discrete Bayes Filter (discrete Space)
+\end{description}
 \cite[Seite 115]{Hertzberg2012} \cite{Thrun2006} 
 
     \begin{table}[htdp]
@@ -19,7 +29,7 @@
         \textbf{.80}  & 1568 &  697 & 392 & 251 & 174 &  98 &  63 &  44 & 32 & 25 \\ \hline
         \textbf{.90}  & 2100 &  933 & 525 & 336 & 233 & 131 &  84 &  58 & 43 & 33 \\ \hline
         \textbf{.95}  & 2592 & 1152 & 648 & 415 & 288 & 162 & 104 &  72 & 53 & 41 \\ \hline
-        \textbf{.99} & 3680 & 1636 & 920 & 589 & 409 & 230 & 147 & 102 & 75 & 58 \\ \hline
+        \textbf{.99}  & 3680 & 1636 & 920 & 589 & 409 & 230 & 147 & 102 & 75 & 58 \\ \hline
       \end{tabular}
     \end{table}
 
