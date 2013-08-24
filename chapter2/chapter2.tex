@@ -27,6 +27,13 @@ Der in Kapitel \ref{chap:einleitung} genannte Partikel Filter ist eine Variante 
 
 \section{Bildverarbeitung}
 \label{sec:bildverarbeitung}
+Da die von einer Kamera aufgenommenen Bilder in dieser Arbeit eine zentrale Rolle spielen, ist es wichtig zu verstehen, wie diese zustande kommen. Daher soll an dieser Stelle kurz darauf eingegangen werden, wie sich eine Kamera formal beschreiben lässt.
+\subsection{Kamera Modell}
+Die Lochkamera ist ein sehr einfaches Modell das häufig zur Veranschaulichung verwendet wird. Es soll hier nicht im Detail beschrieben werden, dafür wären ... oder ... zu empfehlen. Doch für das hier vorgestellte Verfahren ist es wichtig das Konzept dahinter zu verstehen:
+
+Die Kamera projiziert im Wesentlichen Punkte aus dem Raum(3D) auf die Bildebene(2D). Um nun bei gegebenen Koordinaten eines 3D-Punktes in Weltkoordinaten den passenden Punkt auf der Bildebene berechnen zu können, ist die Kenntniss verschiedener Parameter erforderlich. Dabei trennt man in extrinsische und intrinsische Parametern. Unter den extrinsichen Kamera Parametern versteht man die Pose der Kamera in Weltkoordinaten. Also wo sich die Kamera befindet, und wie sie ausgerichtet ist. Dies wird in einer Transformationsmatrix ausgedrückt, mit der sich Koordinaten zwischen dem Kamerakoordinatensystem und dem Weltkoordinatensystem  transformieren lassen.
+
+Die intrinsischen Parameter sind nötig, um 3D-Punkte (in Kamerakoordinaten) auf die Bildebene zu projizieren. 
 
 \subsection{Projektion aus dem Raum auf die Bildebene}
 \label{subsec:projektion}
