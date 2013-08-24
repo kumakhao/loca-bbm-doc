@@ -1,5 +1,13 @@
 \chapter{Lokalisierung mittels Bildverarbeitung}
 \label{chap:lokalisierungmittelsbildverarbeitung}
+
+\subsection{Partikel Filter}
+\label{sub:PartikelFilter}
+Der \textbf{Zustandsraum} der Partikel setzt sich aus der Position und der Pose des Roboters zusammen. Da er sich ausschließlich auf einer ebenen Bühne befindet, führt dies zur Reduktion der Freiheitsgrade von sechs auf drei: X, Y und $\psi$. 
+
+Das \textbf{Dynamikmodell} für den Roboter basiert auf der Odometrie. Als Input bekommt das Dynamik-Update die Inkremente des linken und rechten Rades. Es sind die relative Inkrementwerte, also seit dem letzten Dynamik-Update. Sie werden verwendet, um daraus eine Vorwärtsfahrt und einen Drehwinkel zu berechnen. Zu diesen wird jeweils ein Gaußsches Rauschen addiert
+
+
 Wieviele Partikel, und warum?
 Wie sieht der Partikelraum aus?
 Wie ist das Messmodell aufgebaut?
