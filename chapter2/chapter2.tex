@@ -1,10 +1,23 @@
 \chapter{Grundlagen}
 \label{chap:grundlagen}
 
+\section{Der Roboter}
+\label{derroboter}
+An dieser Stelle soll kurz beschrieben werden, wie die Roboter aufgebaut sind die als Grundlage für die Simulation dienen. Auf den Abbildungen~\ref{fig:RobotAndGuests}, \ref{fig:RobotAndLightwall} und \ref{fig:RobotCloseUp} sind sie zu sehen. Sie besitzen zwei angetriebene Räder und mindestens ein weiteres Stützrad, dass frei drehbar ist. Die Räder können unabhängig von einander angetrieben werden. Dazu sind pro Rad ein Servomotor mit Motorsteuerung und ein Getriebe mit Übersetzung verbaut.
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{chapter2/RobotNahaufnahme.png}
+    \caption[Nahaufnahme eines der Roboter]{Einer der Roboter in Nahaufnahme}
+    \label{fig:RobotCloseUp}
+  \end{figure}
+Zudem ist an jedem Rad ein Inkrementalgeber angebracht, der die Umdrehungen der Motorwelle misst. Es gibt verschiedene Baugrößen, der Antrieb ist aber bei allen der selbe. Die Räder haben einen Durchmesser von  160~mm, das Getriebe hat ein Übersetzungsverhältnis von 1:14,5 und die Inkrementalgeber haben eine Auflösung von 2000 Ticks pro Umdrehung. Lediglich der Randstand unterscheidet sich bei den Baugrößen. Für die Simulation wird mit 700~mm gearbeitet.
+
+
+
 \section{Lokalisation}
 \label{sec:lokalisation}
 Die Lokalisation ist eines der Grundprobleme das beim Einsatz von mobilen Robotern auftritt.
-In \cite[Seite 193]{Thrun2006} wird die sie in drei Teilprobleme zerlegt:
+In \cite[Seite 193]{Thrun2006} wird es in drei Teilprobleme zerlegt:
 \begin{description}
 \item[Position Tracking] bezeichnet den Vorgang, bei dem mit bekannter Ausgangsposition diese mit Hilfe von Sensordaten bei Bewegungen verfolgt werden kann. Dabei spielt das Dynamikmodell des Roboters sowie darin modellierte Unsicherheiten eine wichtige Rolle. Denn bewegt sich der Roboter von einer bekannten Position aus, wird mit dem Dynamikmodell seine neue Position geschätzt. Die Unsicherheiten des Modells erzeugen dabei eine Wahrscheinlichkeitsverteilung um diese neue Position, in der sich die wahre Position befinden sollte. Ohne Messungen von weiteren Sensoren die Rückschlüsse auf die Umgebung erlauben, würde die Positionsschätzung mit der Zeit immer ungenauer. Mit Hilfe eines Messmodells lässt sich beurteilen, ob eine Messung an einer Bestimmten Position wahrscheinlich erscheint, oder nicht. Dadurch lässt sich die Wahrscheinlichkeitsverteilung der Position nach einer Bewegung durch eine Messung wieder eingrenzen. Auf den Bereich, in dem der Messwert des Sensors am Wahrscheinlichsten ist.
 \item[Global Localization] ist das finden der Anfangsposition des Roboters unter allen Möglichen Posen die im Szenario vorkommen können. Im Vergleich zum \textit{Position Tracking}, bei dem es genügte die Unsicherheit um die geschätzte neue Pose zu berücksichtigen, umfasst hier der Raum möglicher Posen ein erheblich größeres Volumen. Ein Ansatz wäre alle möglichen Posen mit der selben Wahrscheinlichkeit anzunehmen, und mit den ersten Messungen und dem Messmodell diese einzugrenzen. Auf Bereiche in denen diese Messungen mit hoher Wahrscheinlichkeit auftritt. 
@@ -35,22 +48,20 @@ Wenn der Zustandsraum alle möglichen Zustände eines Systems beschreibt, so sind 
 
 Das \textbf{Dynamik-Update} berechnet auf Grundlage des Dynamikmodells eine neue Prognose. Konkret wird im Partikel Filter dafür zu jedem Partikel eine eigene Prognose gestellt. Dabei wird eventuelles Systemrauschen durch eine Ziehung pro Partikel aus dessen Wahrscheinlichkeitsverteilung (häufig Gaußverteilung) abgebildet. Die Prognosen aller Partikel bilden dann den neuen Systemzustand.
 
-Der \textbf{Observe} Aufruf verarbeitet eine Messung mit Hilfe des Messmodells. Konkret wird für jedes Partikel, und damit Zustand des es repräsentiert, geprüft wie wahrscheinlich eine solche Messung wäre. Bei einer hohen Wahrscheinlichkeit, wird der Gewichtungswert im Partikel größer. Bei geringer Wahrscheinlichkeit für eine solche Messung sinkt der Gewichtungswert. Nun repräsentieren diese Gewichte der Partikel den neuen Systemzustand.
+Der \textbf{Observe} Aufruf verarbeitet eine Messung mit Hilfe des Messmodells. Konkret wird für jedes Partikel, und damit den Zustand den es repräsentiert, geprüft wie wahrscheinlich eine solche Messung wäre. Bei einer hohen Wahrscheinlichkeit, wird der Gewichtungswert im Partikel größer. Bei geringer Wahrscheinlichkeit für eine solche Messung sinkt der Gewichtungswert. Nun repräsentieren diese Gewichte der Partikel den neuen Systemzustand.
 
-Das \textbf{Resampling} überführt die Information in den Partikel Gewichten wieder in die Partikel Häufung. Es wird normaler weise nach jedem Observe vorgenommen. Dies geschieht durch Ziehen von Partikeln der alten Partikelmenge mit einer Wahrscheinlichkeit die proportional zum Gewicht eines Partikels ist. Somit werden Partikel die ein hohes Gewicht hatten häufiger gezogen als jede, die nur ein geringes Gewicht hatten. Damit "überleben" das Resampling die Partikel dessen Zustand von einer vorgenommenen Messung bestätigt wird. In ... wird ein Problem beim Resampling beschrieben, welches bei unabhängigen Ziehungen auftritt. Es wird ... genannt und kann dazu führen, das Partikel auch mit hohem Gewicht zufällig gar nicht gezogen werden. Dies würde einen Informationsverlust bedeuten, der im Extremfall den wahren Zustand "vergessen" lässt.
-
-\cite{Thrun:2002:PFR:2073876.2073937} 
+Ein \textbf{Resampling} überführt die Information in den Partikel Gewichten wieder in die Partikel Häufung. Es wird normaler weise nach jedem Observe vorgenommen. Dies geschieht durch Ziehen von Partikeln der alten Partikelmenge mit einer Wahrscheinlichkeit die proportional zum Gewicht eines Partikels ist. Somit werden Partikel die ein hohes Gewicht hatten häufiger gezogen als jede, die nur ein geringes Gewicht hatten. Damit "überleben" das Resampling die Partikel dessen Zustand von einer vorgenommenen Messung bestätigt wird. In \cite[Seite 108]{Thrun2006} wird ein Problem beim Resampling beschrieben, welches bei unabhängigen Ziehungen auftritt. Es wird \textsc{variance reduction} genannt und führt dazu, das Partikel mit geringem Gewicht zufällig gar nicht gezogen werden. Dies bedeutet einen Informationsverlust, der mit wiederholtem Resampling im Extremfall auf nur einen einzigen Zustand degeneriert. Um dem entgegen zu wirken, sollte das Resampling nur durchgeführt werden, wenn sich die Gewichte in den Partikeln verändert haben. Also nach einer Messung beispielsweise. Weiß man jedoch sicher, dass sich am Zustand nichts ändern kann (z.B. Roboter steht still) sollte man weder Messungen auswerten, noch ein Resampling durchführen. Zudem sollte systematisches Ziehen anstelle von unabhängigen Ziehungen eingesetzt werden. Hierbei wird ein Partikel zufällig ausgewählt, und die übrigen systematisch anhand ihrer Gewichtung ermittelt.
 
 \section{Bildverarbeitung}
 \label{sec:bildverarbeitung}
 Da die von einer Kamera aufgenommenen Bilder in dieser Arbeit eine zentrale Rolle spielen, ist es wichtig zu verstehen, wie diese zustande kommen. Daher soll an dieser Stelle kurz darauf eingegangen werden, wie sich eine Kamera formal beschreiben lässt.
-\subsection{Kamera Modell}
-Die Lochkamera ist ein sehr einfaches Modell das häufig zur Veranschaulichung verwendet wird. Es soll hier nicht im Detail beschrieben werden, dafür wären ... oder ... zu empfehlen. Doch für das hier vorgestellte Verfahren ist es wichtig das Konzept dahinter zu verstehen:
 
-Die Kamera projiziert im Wesentlichen Punkte aus dem Raum(3D) auf die Bildebene(2D). Um nun bei gegebenen Koordinaten eines 3D-Punktes in Weltkoordinaten den passenden Punkt auf der Bildebene berechnen zu können, ist die Kenntniss verschiedener Parameter erforderlich. Dabei trennt man in extrinsische und intrinsische Parametern. Unter den extrinsichen Kamera Parametern versteht man die Pose der Kamera in Weltkoordinaten. Also wo sich die Kamera befindet, und wie sie ausgerichtet ist. Dies wird in einer Transformationsmatrix ausgedrückt, mit der sich Koordinaten zwischen dem Kamerakoordinatensystem und dem Weltkoordinatensystem  transformieren lassen.
+Die Lochkamera ist ein sehr einfaches Modell das häufig zur Veranschaulichung verwendet wird. Es soll hier nicht im Detail beschrieben werden, dafür wären \cite[Seite 203]{JaehDigi2005} oder \cite[Seite 47]{ToenGrun2005} zu empfehlen. Doch für das hier vorgestellte Verfahren ist es wichtig das Konzept dahinter zu verstehen:
 
-Die intrinsischen Parameter sind nötig, um 3D-Punkte (in Kamerakoordinaten) auf die Bildebene zu projizieren. 
+Die Kamera projiziert im Wesentlichen Punkte aus dem Raum(3D) auf die Bildebene(2D). Um nun bei gegebenen Koordinaten eines 3D-Punktes in Weltkoordinaten den passenden Punkt auf der Bildebene berechnen zu können, ist die Kenntnis verschiedener Parameter erforderlich. Dabei trennt man in extrinsische und intrinsische Parametern. Unter den extrinsichen Kamera Parametern versteht man die Pose der Kamera in Weltkoordinaten. Also wo sich die Kamera befindet, und wie sie ausgerichtet ist. Dies wird in einer Transformationsmatrix ausgedrückt, mit der sich Punkte zwischen dem Kamera- und Weltkoordinatensystem  transformieren lassen.
 
-\subsection{Projektion aus dem Raum auf die Bildebene}
-\label{subsec:projektion}
+Die intrinsischen Parameter sind nötig, um 3D-Punkte (in Kamerakoordinaten) auf die Bildebene und in Pixelkoordianten zu projizieren. Sie beinhalten neben der Brennweite, auch die Koordinaten wo die optische Achse auf den Bildsensor trifft. Um die auf den Bildsensor projizierten Punkte auch in Pixeln angeben zu können, gibt es einen Skalierungsfaktor.
+
+Bei realen Kameras, muss in der Regel eine Kalibrierung durchgeführt werden, um diese Parameter zu bestimmen. Dabei können die intrinsischen Paramerter gespeichert und wieder verwendet werden, wenn sich die Brennweite nicht ändert (kein Optischer Zoom). Die extrinsischen Parameter müssen neu bestimmt werden, sobald sich die Kamera bewegt. Oder die Bewegung muss bekannt sein um sie in die Transformationsmatrix ein fließen zu lassen. 
+
 
