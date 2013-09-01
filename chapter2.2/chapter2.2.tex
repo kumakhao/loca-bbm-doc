@@ -14,8 +14,8 @@ Die Szene in der Simulation ist aus mehreren Komponenten aufgebaut, die im Folge
  
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{chapter2.2/bildderszene.png}
-    \caption[Bild Simulierte Szene]{Bild Simulierte Szene}
+    \includegraphics[width=0.8\textwidth]{chapter2.2/bildderszene.png}
+    \caption[Simulierte Szene]{Simulierte Szene}
     \label{fig:bildderszene}
 \end{figure}
 
@@ -35,13 +35,24 @@ Auf jedem Segment sind 8 x 8 Bits unter gebracht. Das macht eine Kantenlänge von
 Die Simulation soll, neben der Visualisierung, Messungen liefern um den Lokalisationsalgorythmus testen zu können. Anders als bei Messungen an realen Experimenten hat man in der Simulation den Vorteil, alle das Messergebnis beeinflussenden Faktoren unter Kontrolle zu haben. Möchte man also, dass Messungen eine systematische Abweichung aufweisen, muss diese in der Simulation definiert werden. Genau so verhält es sich mit statistischen Abweichungen. Es lassen sich also schnell die Messunsicherheiten der Simulierten Vorgänge anpassen. Beim Debugging und Funktionstest des Lokalisationsalgorythmus wurde die Unsicherheit zum Beispiel zeitweise entfernt.
 
 \subsubsection*{Messwerte der Inkrementalgeber}
-Wie beim Robotermodell schon beschrieben, wird in der Simulation dessen X/Y-Koordinate sowie der Winkel zur X-Achse als Repräsentation der Pose verwendet. Aus den Positions- ($ \Delta s $) und Orientierungsänderungen ($ \Delta \psi $), in jedem Simulationsschritt, werden Drehwinkeländerungen ($ \Delta \alpha $) der Beiden Räder berechnet:
+Wie beim Robotermodell schon beschrieben, wird in der Simulation dessen X/Y-Koordinate sowie der Winkel zur X-Achse als Repräsentation der Pose verwendet. Aus den Positions- ($ \Delta s $) und Orientierungsänderungen ($ \Delta \psi $), in jedem Simulationsschritt, werden Drehwinkeländerungen ($ \Delta \alpha_{r/l} $) der Beiden Räder berechnet:
+\[\Delta \alpha_{rechts} = \frac{\Delta s + \Delta \psi \cdot D_r}{R_{r}} \]
+\[\Delta \alpha_{links} = \frac{\Delta s - \Delta \psi \cdot D_l}{R_{l}} \]
+mit Abstand $ D_{r/l} $ des Rades von der Mitte der Achse und Radradius $ R_{rad} $. Die Drehwinkeländerungen werden aufsummiert um die Radstellungen zu speichern:
+\[\alpha = \alpha + \Delta \alpha\]
+Aus diesen Winkelstellungen\footnote{Die Winkelstellung der Räder wird nur numerisch simuliert und ist am Modell nicht sichtbar.}  der Räder wird ein Wert für die Inkrementalgeber abgeleitet und auf ganze Inkremente gerundet:
+\[I_{rechts} = \alpha_{rechts} \cdot \frac{g\ \gamma}{2\pi}\]
+\[I_{links} = \alpha_{links} \cdot \frac{g\ \gamma}{2\pi}\]
+mit Getriebeübersetzung: $ g $ und Inkrementalgeber Auflösung(pro Umdrehung): $ \gamma $
 
-\[\Delta \alpha_{l/r} = \underbrace{\Delta s \pm \Delta \psi \cdot \frac{L_{achse}}{2}}_{zurückgelegte\ Strecke\ pro\ Rad} \cdot \frac{\gamma}{U_{rad}\cdot g} \]
+\subsubsection*{Messabweichung des Inkrementalgebers}
+Es können drei verschiedene Typen von Messabweichungen simuliert werden:
 
-mit Länge der Achse: $ L_{achse} $, Radumfang: $ U_{rad} $, Getriebeübersetzung: $ g $ und Inkrementalgeber Auflösung: $ \gamma $ (pro Umdrehung)
+Eine \textbf{systematische Abweichung} bei der Umrechnung vom Radwinkel in Inkremente. Dies führt zu einem sich akkumulierenden Fehler in der Gefahrenen Strecke und der Orientierung. In der Simulation wurde diese Art Unsicherheit durch einen veränderten Radradius erzeugt. Für beide Räder wird vor jedem Simulationslauf in einem Fehlerintervall der Radius leicht verändert. Je stärker die Radien sich unterscheiden, umso stärker scheint der Roboter bei geradeaus Fahrt zu einer Seite zu driften. Diese Art Messabweichung ist also über die Dauer eine Simulation konstant, aber für jeden Simulationslauf zufällig.
 
-Über alle Schritte akkumuliert, ist der Drehwinkel der Räder ($ \alpha_{l/r} $) der wahre Zustand der Odometrie in der Simulation. Aus diesen Winkelstellungen\footnote{Die Winkelstellung der Räder wird nur numerisch simuliert und ist am Modell nicht sichtbar.}  der Räder wird ein Wert für die Inkrementalgeber abgeleitet und auf ganze Inkremente gerundet.
+Eine \textbf{systematische Abweichung} die nur bei Drehungen auftritt. Dies ist typischerweise die dominante Fehlerquelle bei radgetriebenen Robotern. Bei einer Drehung ist der Auflagepunkt der Räder nicht bekannt, da der innen liegende Teil der Rades sich langsamer drehen müsste als der äußere. Dies führt bei einer Drehung dazu, dass der Abstand des Rades zur Drehachse nicht genau bekannt ist. In der Simulation wird daher dieser Abstand über die Breite der Räder zufällig bestimmt. Realistischer weise müsste dieser Abstand für jede Drehung neu bestimmt werden. Zum testen der Lokalisation reicht es aber aus, wenn dies nur einmal zu beginn einer Simulation geschieht. Dadurch treten bei Drehungen Messabweichungen auf, die zwar über einen Simulationslauf konstant und damit systematisch sind, aber die Lokalisierung genau so erschweren wie zufällige Abstände während der Laufzeit.
+
+Eine \textbf{zufällige Abweichung} bei den Inkrementschritten.
 
 \subsubsection*{Bilder der Kamera}
 noch mehr test text zum testen.
