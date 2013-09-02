@@ -5,9 +5,15 @@
 \label{sec:PartikelFilter}
 Der \textbf{Zustandsraum} der Partikel setzt sich aus der Position und der Pose des Roboters zusammen. Da er sich ausschließlich auf einer ebenen Bühne befindet, führt dies zur Reduktion der Freiheitsgrade von sechs auf drei: X, Y und $\psi$. 
 
-Das \textbf{Dynamikmodell} für den Roboter basiert auf der Odometrie. Als Input bekommt das Dynamik-Update die Inkremente des linken und rechten Rades. Es sind absolute Inkrementwerte aus denen die Differenzen zum letzten Update gebildet werden. Sie werden verwendet, um daraus eine Vorwärtsfahrt und einen Drehwinkel zu berechnen. Zu diesen wird jeweils ein Gaußsches Rauschen addiert
+Das \textbf{Dynamikmodell} für den Roboter basiert auf der Odometrie. Als Input bekommt das Dynamik-Update die Inkremente des linken und rechten Rades. Es sind absolute Inkrementwerte aus denen die Differenzen $ \Delta I_{r/l} $ zum letzten Update gebildet werden. Sie werden verwendet, um daraus eine Vorwärtsfahrt $ \Delta s $ und einen Drehwinkel $ \Delta \psi $ zu berechnen:
+\[\Delta s = \frac{\Delta I_r + \Delta I_l}{2}\cdot \underbrace{\frac{2\pi r}{g \cdot \gamma}}_{E}\]
+\[\Delta \psi = \frac{\Delta I_r - \Delta I_l}{2}\cdot \frac{2\cdot E}{D}\]
+mit Radabstand $ D $, Getriebeübersetztung $ g $ und Geberauflösung $ \gamma $
 
-
+Jedes Partikel berechnet daraus seinen neuen Zustand:
+\[x_t = x_{t-1} + cos(\psi_{t-1} + \frac{\Delta \psi + \psi_{err}}{2})\cdot (\Delta s + s_{err})\]
+\[y_t = y_{t-1} + sin(\psi_{t-1} + \frac{\Delta \psi + \psi_{err}}{2})\cdot (\Delta s + s_{err})\]
+\[\psi_t = \psi_{t-1} +\Delta \psi + \psi_{err}\]
 Wieviele Partikel, und warum?
 Wie sieht der Partikelraum aus?
 Wie ist das Messmodell aufgebaut?

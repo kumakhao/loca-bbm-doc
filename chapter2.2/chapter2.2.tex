@@ -52,7 +52,7 @@ Eine \textbf{systematische Abweichung} bei der Umrechnung vom Radwinkel in Inkre
 
 Eine \textbf{systematische Abweichung} die nur bei Drehungen auftritt. Dies ist typischerweise die dominante Fehlerquelle bei radgetriebenen Robotern. Bei einer Drehung ist der Auflagepunkt der Räder nicht bekannt, da der innen liegende Teil der Rades sich langsamer drehen müsste als der äußere. Dies führt bei einer Drehung dazu, dass der Abstand des Rades zur Drehachse nicht genau bekannt ist. In der Simulation wird daher dieser Abstand über die Breite der Räder zufällig bestimmt. Realistischer weise müsste dieser Abstand für jede Drehung neu bestimmt werden. Zum testen der Lokalisation reicht es aber aus, wenn dies nur einmal zu beginn einer Simulation geschieht. Dadurch treten bei Drehungen Messabweichungen auf, die zwar über einen Simulationslauf konstant und damit systematisch sind, aber die Lokalisierung genau so erschweren wie zufällige Abstände während der Laufzeit.
 
-Eine \textbf{zufällige Abweichung} bei den Inkrementschritten.
+Eine \textbf{zufällige Abweichung} bei den Inkrementschritten soll ein mögliches Spiel in Kupplung oder Getriebe simulieren. Dabei wird zu dem akkumulierten Inkrementalwert eines Rades ein Gaußsches Rauschen addiert, welches proportional zur letzten Winkeländerung ist. Ist diese bei Stillstand gleich Null, so wird nur ein schwaches Grundrauschen addiert.
 
 \subsubsection*{Bilder der Kamera}
 noch mehr test text zum testen.
