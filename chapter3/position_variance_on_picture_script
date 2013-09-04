@@ -1,0 +1,22 @@
+#set terminal pngcairo  transparent enhanced font "arial,10" fontscale 1.0 size 500, 350 
+#set output 'contours.21.png'
+#set key below
+set terminal epslatex color size 6,5
+set output "chapter3/position_variance_on_picture.tex"
+set xrange [-1:1]
+set yrange [-1:1]
+set size ratio 1.0
+set zeroaxis
+set border 0
+set grid 
+set xtics -1,1,1
+set ytics -1,1,1
+set tics scale 0.5
+set xlabel "XAchse in Metern"
+set ylabel "YAchse in Metern"
+
+set view map
+unset surface
+set contour base
+set dgrid3d 50,50 qnorm 4
+splot "chapter3/position_variance_on_picture" with lines t ""

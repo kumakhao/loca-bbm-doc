@@ -14,15 +14,30 @@ Jedes Partikel berechnet daraus seinen neuen Zustand:
 \[x_t = x_{t-1} + cos(\psi_{t-1} + \frac{\Delta \psi}{2})\cdot \Delta s\]
 \[y_t = y_{t-1} + sin(\psi_{t-1} + \frac{\Delta \psi}{2})\cdot \Delta s\]
 \[\psi_t = \psi_{t-1} +\Delta \psi\]
-Dabei wird erst eine Drehung um $ \frac{\Delta \psi}{2} $ vollzogen, gefolgt von der Geradeausfahrt um $ \Delta s $ mit einer abschließenden Drehung um $ \frac{\Delta \psi}{2} $
-Diese Gleichungen entsprechen einem Modell 
+Dabei wird erst eine Drehung um $ \frac{\Delta \psi}{2} $ vollzogen, gefolgt von der Geradeausfahrt um $ \Delta s $ mit einer abschließenden Drehung um $ \frac{\Delta \psi}{2} $.
+Damit der Partikel Filter funktioniert, muss er die Messunsicherheiten der Eingangswerte berücksichtigen. Dazu wird vor der Zustandsberechnung, zu $ \Delta s $ und $ \Delta \psi $ ein Gaußsches Rauschen addiert. Es ist proportional zu deren Betrag:
+\[\Delta s_{err} = \Delta s \cdot \sigma_{s} \cdot RandomGaussian()\]
+\[\Delta \psi_{err} = \Delta \psi \cdot \sigma_{\psi} \cdot RandomGaussian()\]
+$ \sigma_{s} $ und $\sigma_{\psi}$ sind dabei ein Maß dafür wie breit die Streuung der Normalverteilung ist. Sie sind Parameter die auf den Anwendungsfall, nach Stärke des erwarteten Rauschens, eingestellt werden müssen. Dabei soll die Streuung der Partikel im Zustandsraum mindestens genau so groß sein, wie die Streuung um den wahren Wert, verursacht durch Messunsicherheit der Sensoren. Wir das $\sigma$ zu klein gewählt, so kann es  passieren, dass die Verteilung der Partikel den wahren Zustand nicht mehr enthält. Somit gibt es bei einer Messung kein Partikel mehr, dessen Zustand diese als wahrscheinlich erscheinen lässt. Damit folgen die Partikel im Zustandsraum einer falschen Schätzung, und die Messungen sind wertlos. Der Partikel Filter hätte die Position verloren.
 
+Setzt man das $\sigma$ größer an, so divergieren die Partikel mit jedem Dynamik-Update stärker und der wahre Wert wird hoher Wahrscheinlichkeit von Partikeln abgedeckt, so dass bei einer Messung diese einen guten Score bekommen und durch ein Resampling sich die Partikel wieder um den wahren Wert konzentrieren. Allerdings ist bei zu großem $\sigma$ die Aussagekraft der Partikelverteilung sehr ungenau und es sind viele Partikel nötig, um die nötige Dichte im Zustandsraum zu gewährleisten. Dabei spielt es eine entscheidende Rolle, wie häufig Messungen erfolgen. Denn zwischen den Messungen muss sich der Filter auf das Dynamikmodell verlassen, und bei großem $\sigma$ ist die Schätzung nach wenigen Schritten bereits mit einer großen Unsicherheit verbunden.
+
+Als Messungen werden die Bilder einer Kamera auf dem Roboter verwendet. Das \textbf{Messmodell} dahinter beruht auf dem Wissen um die Position von bestimmten Mustern in der Umgebung. Dies kann als Karte der Umgebung verstanden werden, anhand derer sich der Roboter orientieren muss. Es gibt drei verschiedene Muster, auf jeder Lichtwand eines. Die Muster werden in der obersten Zeile der Lichtwand angezeigt, um möglichst selten verdeckt zu werden. Bei dem Messmodell gilt es nun zu prüfen, ob ein Bild zu einer bestimmten Pose passt oder nicht. Dafür könnte man in dem Bild nach den bekannten Mustern suchen, und sobald diese gefunden sind versuchen diese einer Pose zu zuordnen. Aber eine solche Mustersuche in einem Bild ist immer in verschiedene Schritte aufgeteilt, die auf einander aufbauen. Also z.B. Binarisierung über einen Schwellwert, Regionenbildung mit Charakterisierung und anschließende Auswertung ausgewählter Regionen. Oder Kantenerkennung, Hough-Transformation und finden von parallelen kurzen Linien. Ein Problem daran ist, dass wenn in einem ersten Schritt z.B. ein Schwellwert falsch gewählt wurde, oder nur sehr schwache Kanten vorhanden sind, alle folgenden Schritte scheitern, weil ihre Vorbedingungen nicht ausreichend erfüllt werden. Aus diesem Grund wurde ein anderer Ansatz verfolgt, bei dem man nicht das Bild und die Informationen darin als Ausgangspunkt nimmt, sondern die Pose der Partikel und die Position der Muster im Raum. Dazu soll aus der Pose des Partikels die Pose der Kamera abgeleitet werden. Und anschließend die Position des Musters aus dem Raum in Pixelkoordinaten projiziert werden. Damit könnte man für jede beliebige Pose des Roboters sagen wo im Bild das Muster zu sehen sein müsste und diese Bereiche mit dem erwarteten Muster vergleichen. Je besser der Bereich zu dem Muster passt, umso höher wird der Score für die Partikel Bewertung.
+
+{\color{red}
 Wieviele Partikel, und warum?
-Wie sieht der Partikelraum aus?
+
+Wie sieht der Partikelraum aus? 
+
 Wie ist das Messmodell aufgebaut?
+
 Besonderheiten im Messmodell: erst an 10 Punken wird ausgewertet, geringer Kontrast führt zu Abwertung.
+
 Wie wird initialisiert? 
+
 Wie ist das Dynamikmodell aufgebaut?
+
 Wie ist das Muster aufgebaut?
 
 Wie wird die "geschätzte" Position berechnet?
+}
