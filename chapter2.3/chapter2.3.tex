@@ -11,9 +11,12 @@ Das \textbf{Dynamikmodell} für den Roboter basiert auf der Odometrie. Als Input 
 mit Radabstand $ D $, Getriebeübersetztung $ g $ und Geberauflösung $ \gamma $
 
 Jedes Partikel berechnet daraus seinen neuen Zustand:
-\[x_t = x_{t-1} + cos(\psi_{t-1} + \frac{\Delta \psi + \psi_{err}}{2})\cdot (\Delta s + s_{err})\]
-\[y_t = y_{t-1} + sin(\psi_{t-1} + \frac{\Delta \psi + \psi_{err}}{2})\cdot (\Delta s + s_{err})\]
-\[\psi_t = \psi_{t-1} +\Delta \psi + \psi_{err}\]
+\[x_t = x_{t-1} + cos(\psi_{t-1} + \frac{\Delta \psi}{2})\cdot \Delta s\]
+\[y_t = y_{t-1} + sin(\psi_{t-1} + \frac{\Delta \psi}{2})\cdot \Delta s\]
+\[\psi_t = \psi_{t-1} +\Delta \psi\]
+Dabei wird erst eine Drehung um $ \frac{\Delta \psi}{2} $ vollzogen, gefolgt von der Geradeausfahrt um $ \Delta s $ mit einer abschließenden Drehung um $ \frac{\Delta \psi}{2} $
+Diese Gleichungen entsprechen einem Modell 
+
 Wieviele Partikel, und warum?
 Wie sieht der Partikelraum aus?
 Wie ist das Messmodell aufgebaut?
