@@ -62,7 +62,9 @@ in eine Punktmenge in Pixelkoordinaten $M_P$ projiziert werden
 
 \section{Musterbewertung}
 \label{sec:musterbewertung}
+Bei der Musterbewertung geht es darum, zu einer bekannten Region im Bild eine Bewertung ab zu geben, wie gut sie zu einem gegebenen Muster passt. Dabei soll ein Score berechnet werden der zwischen 0 und 1 liegt. Wobei 0 keinerlei und 1 volle Übereinstimmung signalisiert. Es ist gewollt, dass hier keine harte Entscheidung getroffen wird. Denn damit gehen Informationen verloren, die zur Lokalisierung beigetragen hätten. Wenn beispielsweise ein Teil des Musters verdeckt wurde, so wäre immer noch ein mittlerer Score möglich. Bei einer harten Entscheidung würde dieses Bild verworfen werden.
 
+Für die Musterbewertung stehen die Bildpositionen jedes Bits der drei Bitmuster aus der Projektion zur Verfügung. Dabei entspricht sie stets dem Mittelpunkt der 125~x~125~mm großen Bits der Lichtwände. Der erste  Schritt ist eine einfache Überprüfung, ob die Pixelkoordinaten der Muster-Bits tatsächlich in dem Bild liegen. Denn die Projektion ist nicht auf einen Bildausschnitt beschränkt. Aus der Menge der Bildpunkte die ein Muster-Bit repräsentieren $M_P$ können so alle aussortiert werden, die nicht in dem betrachteten Bildausschnitt gelandet sind. Ein Spezialfall wäre nun, das kein Muster-Bit als Punkt im Bild gelandet ist. 
 
 \section{Parameter einstellen}
 \label{sec:parameter_loca}
