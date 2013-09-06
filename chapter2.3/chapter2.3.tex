@@ -1,11 +1,31 @@
 \chapter{Lokalisierung mittels Bildverarbeitung}
 \label{chap:lokalisierungmittelsbildverarbeitung}
 
+  \begin{wrapfigure}{o}{0.3\textwidth}
+  	\center
+    \includegraphics[width=0.2\textwidth]{chapter2.3/BitmusterVergleich.png}
+    \caption[Bitmuster der Lichtwände]{Muster}
+    \vspace{-70pt}
+    \label{fig:bitmuster}
+  \end{wrapfigure}
+In diesem Kapitel soll das Verfahren beschrieben werden, mit dem die Lokalisierung erfolgt. Dabei wird erklärt wie das zu erkennende Bitmuster aufgebaut ist, wie der eingesetzte Partikel Filter ausgelegt wurde, und wie genau der Filter die Bilder beurteilt. Im letzten Abschnitt wird auf verschiedene Parameter eingegangen, die Einstellmöglichkeiten des Filters erlauben.
+\section{Bitmuster}
+\label{bitmuster}
+Die drei Bitmuster, in der Obersten Zeilen der Lichtwände, sind 64 Bit lang, da eine Lichtwand aus 8 Segmenten mit je 8 Bit aufgebaut ist. Jedes Segment ist 1~m lang. Damit ist ein Bit 125~x~125~mm groß. Als Muster wurde eine Zeichenfolge in Strichcode verwendet. Als Codierung wurde Code 93 eingesetzt. Er codiert 48 verschiedene Zeichen in 9 Bit lagen Blöcken. Dabei sind mindestens 3 Bit immer \textbf{true}(1) und 3 immer \textbf{false}(0). Außerdem können höchstens 4 gleiche Bits auf einander folgen. Code 93 wurde gewählt, weil es schnell zu implementieren war, und sicher stellen konnte, dass es auch in beliebigen Ausschnitten der Muster genug Unterschiede zwischen den Lichtwänden gab. Auf Abbildung \ref{fig:bitmuster} sieht man die drei verwendeten Codestreifen. Rechts daneben sind die Zeichen für den codierten Abschnitt angegeben. Es sind 9 Bit lange Blöcke. Es gibt 7 solcher Blöcke die 63 Bits füllen, das letzte Bit ist bei zwei schwarz und einem weiß gewählt worden. Eine vollständige Tabelle der Codierung ist im Anhang auf Seite \pageref{fig:code93table} zu sehen.
+
+
 \section{Partikel Filter}
 \label{sec:PartikelFilter}
-Der \textbf{Zustandsraum} der Partikel setzt sich aus der Position und der Pose des Roboters zusammen. Da er sich ausschließlich auf einer ebenen Bühne befindet, führt dies zur Reduktion der Freiheitsgrade von sechs auf drei: X, Y und $\psi$. 
+Für die Lokalisierung wird ein Partikel Filter verwendet. In diesem Abschnitt wird erläutert, wie dieser entworfen wurde. Wie der Zustandsraum gewählt wurde und wie viele Partikel verwendet werden. Wie das Dynamikmodell die Odometrie der Antriebe verwendet um die Pose des Roboters zu schätzen. Und wie im Messmodell die Bilder der Kamera verwendet werden. 
+\subsection{Zustandsraum}
+\label{subsec:zustandsraum}
+Der Zustandsraum der Partikel setzt sich aus der Position und der Pose des Roboters zusammen. Da er sich ausschließlich auf einer ebenen Bühne befindet, führt dies zur Reduktion der Freiheitsgrade von sechs auf drei: X, Y und $\psi$. 
 
-Das \textbf{Dynamikmodell} für den Roboter basiert auf der Odometrie. Als Input bekommt das Dynamik-Update die Inkremente des linken und rechten Rades. Es sind absolute Inkrementwerte aus denen die Differenzen $ \Delta I_{r/l} $ zum letzten Update gebildet werden. Sie werden verwendet, um daraus eine Vorwärtsfahrt $ \Delta s $ und einen Drehwinkel $ \Delta \psi $ zu berechnen:
+{\color{red} todo wieviel partikel, warum?}
+
+\subsection{Dynamikmodell}
+\label{subsec:dynamikmodell}
+Das Dynamikmodell für den Roboter basiert auf der Odometrie. Als Input bekommt das Dynamik-Update die Inkremente des linken und rechten Rades. Es sind absolute Inkrementwerte aus denen die Differenzen $ \Delta I_{r/l} $ zum letzten Update gebildet werden. Sie werden verwendet, um daraus eine Vorwärtsfahrt $ \Delta s $ und einen Drehwinkel $ \Delta \psi $ zu berechnen:
 \[\Delta s = \frac{\Delta I_r + \Delta I_l}{2}\cdot \underbrace{\frac{2\pi r}{g \cdot \gamma}}_{E}\]
 \[\Delta \psi = \frac{\Delta I_r - \Delta I_l}{2}\cdot \frac{2\cdot E}{D}\]
 mit Radabstand $ D $, Getriebeübersetztung $ g $ und Geberauflösung $ \gamma $
@@ -22,8 +42,30 @@ $ \sigma_{s} $ und $\sigma_{\psi}$ sind dabei ein Maß dafür wie breit die Streuu
 
 Setzt man das $\sigma$ größer an, so divergieren die Partikel mit jedem Dynamik-Update stärker und der wahre Wert wird hoher Wahrscheinlichkeit von Partikeln abgedeckt, so dass bei einer Messung diese einen guten Score bekommen und durch ein Resampling sich die Partikel wieder um den wahren Wert konzentrieren. Allerdings ist bei zu großem $\sigma$ die Aussagekraft der Partikelverteilung sehr ungenau und es sind viele Partikel nötig, um die nötige Dichte im Zustandsraum zu gewährleisten. Dabei spielt es eine entscheidende Rolle, wie häufig Messungen erfolgen. Denn zwischen den Messungen muss sich der Filter auf das Dynamikmodell verlassen, und bei großem $\sigma$ ist die Schätzung nach wenigen Schritten bereits mit einer großen Unsicherheit verbunden.
 
-Als Messungen werden die Bilder einer Kamera auf dem Roboter verwendet. Das \textbf{Messmodell} dahinter beruht auf dem Wissen um die Position von bestimmten Mustern in der Umgebung. Dies kann als Karte der Umgebung verstanden werden, anhand derer sich der Roboter orientieren muss. Es gibt drei verschiedene Muster, auf jeder Lichtwand eines. Die Muster werden in der obersten Zeile der Lichtwand angezeigt, um möglichst selten verdeckt zu werden. Bei dem Messmodell gilt es nun zu prüfen, ob ein Bild zu einer bestimmten Pose passt oder nicht. Dafür könnte man in dem Bild nach den bekannten Mustern suchen, und sobald diese gefunden sind versuchen diese einer Pose zu zuordnen. Aber eine solche Mustersuche in einem Bild ist immer in verschiedene Schritte aufgeteilt, die auf einander aufbauen. Also z.B. Binarisierung über einen Schwellwert, Regionenbildung mit Charakterisierung und anschließende Auswertung ausgewählter Regionen. Oder Kantenerkennung, Hough-Transformation und finden von parallelen kurzen Linien. Ein Problem daran ist, dass wenn in einem ersten Schritt z.B. ein Schwellwert falsch gewählt wurde, oder nur sehr schwache Kanten vorhanden sind, alle folgenden Schritte scheitern, weil ihre Vorbedingungen nicht ausreichend erfüllt werden. Aus diesem Grund wurde ein anderer Ansatz verfolgt, bei dem man nicht das Bild und die Informationen darin als Ausgangspunkt nimmt, sondern die Pose der Partikel und die Position der Muster im Raum. Dazu soll aus der Pose des Partikels die Pose der Kamera abgeleitet werden. Und anschließend die Position des Musters aus dem Raum in Pixelkoordinaten projiziert werden. Damit könnte man für jede beliebige Pose des Roboters sagen wo im Bild das Muster zu sehen sein müsste und diese Bereiche mit dem erwarteten Muster vergleichen. Je besser der Bereich zu dem Muster passt, umso höher wird der Score für die Partikel Bewertung.
+\subsection{Messmodell}
+\label{subsec:messmodell}
+Als Messungen werden die Bilder einer Kamera auf dem Roboter verwendet. Das Messmodell dahinter beruht auf dem Wissen um die Position von bestimmten Mustern in der Umgebung. Dies kann als Karte der Umgebung verstanden werden, anhand derer sich der Roboter orientieren muss. Es gibt drei verschiedene Muster, auf jeder Lichtwand eines. Die Muster werden in der obersten Zeile der Lichtwand angezeigt, um möglichst selten verdeckt zu werden. Bei dem Messmodell gilt es nun zu prüfen, ob ein Bild zu einer bestimmten Pose passt oder nicht. Dafür könnte man in dem Bild nach den bekannten Mustern suchen, und sobald diese gefunden sind versuchen diese einer Pose zu zuordnen. Aber eine solche Mustersuche in einem Bild ist immer in verschiedene Schritte aufgeteilt, die auf einander aufbauen. Also z.B. Binarisierung über einen Schwellwert, Regionenbildung mit Charakterisierung und anschließende Auswertung ausgewählter Regionen. Oder Kantenerkennung, Hough-Transformation und finden von parallelen kurzen Linien. Ein Problem daran ist, dass wenn in einem ersten Schritt z.B. ein Schwellwert falsch gewählt wurde, oder nur sehr schwache Kanten vorhanden sind, alle folgenden Schritte scheitern, weil ihre Vorbedingungen nicht ausreichend erfüllt werden. Aus diesem Grund wurde ein anderer Ansatz verfolgt, bei dem man nicht das Bild und die Informationen darin als Ausgangspunkt nimmt, sondern die Pose der Partikel und die Position der Muster im Raum. Dazu soll aus der Pose des Partikels die Pose der Kamera abgeleitet werden. Und anschließend die Position des Musters aus dem Raum in Pixelkoordinaten projiziert werden. Damit könnte man für jede beliebige Pose des Roboters sagen wo im Bild das Muster zu sehen sein müsste und diese Bereiche mit dem erwarteten Muster vergleichen. Je besser der Bereich zu dem Muster passt, umso höher wird der Score für die Partikel Bewertung. Wie die gefundenen Pixel im Bild mit dem erwarteten Muster verglichen werden, wird in Abschnitt \ref{sec:musterbewertung} näher beschrieben. Um die Position des Musters im Bild aus der Roboter Position zu berechnen sind mehrere Koordinatentransformationen und eine Projektion nötig. Die Musterposition liegt als Punktmenge $M_W$ der Pixelmittelpunkte in Weltkoordinaten vor. Um sie mit der Kameragleichung in das Bild zu projizieren, müssen sie in die Kamerakoordinaten transformiert werden. Dazu sind folgende Schritte nötig:
 
+\begin{description}
+\item[Welt\ zu\ Roboter $(T_R^W)$] In diese Transformation fließt die Pose des Roboters ein, die in Weltkoordinate vorliegt. Diese Transformation besteht aus Translation in x- und y-Richtung sowie einer Drehung um die z-Achse mit dem Winkel $\psi$. Sie muss für jedes Partikel neu erzeugt werden. Da die Pose sich natürlich ständig ändert, und unter den Partikeln verschieden ist.
+\item[Roboter\ zu\ Kamera $(T_K^R)$] Diese Transformation entspricht der extrinsischen Kameramatrix, die die Pose der Kamera relativ zum Roboter ausdrückt. In der Simulation wurde sie in 500~mm Höhe am Roboter angebracht. Sie blickt in Fahrtrichtung und ist 20° nach Oben geneigt. Ist diese Transformation einmal bekannt, so kann sie immer wieder verwendet werden. In dieser Arbeit ist sie aus der Simulation bekannt. Aber bei einer realen Anwendung müsste zunächst eine Kamerakalibrierung durch geführt werden, um sie zu bestimmten. Um dieses Verfahren erst einmal untersuchen zu können, wird auf die Problematik der Kamerakalibrierung in dieser Arbeit nicht weiter eingegangen.
+\end{description}
+Durch Multiplikation der Transformationmatrizen
+\[M_K=T_K^R \cdot T_R^W \cdot M_W\]
+erhält man die Koordinaten der Bitmuster im Kamerasystem $M_K$. Diese können nun mit der intrinsichsen Kameramatrix
+\[K_i = \left( \begin{array}{ccc}
+f_x & 0 & c_x \\
+0 & f_y & c_y \\
+0 & 0 & 1 \end{array} \right)\]
+in eine Punktmenge in Pixelkoordinaten $M_P$ projiziert werden
+\[M_P = K_i\cdot M_K\]
+
+\section{Musterbewertung}
+\label{sec:musterbewertung}
+
+
+\section{Parameter einstellen}
+\label{sec:parameter_loca}
 {\color{red}
 Wieviele Partikel, und warum?
 
