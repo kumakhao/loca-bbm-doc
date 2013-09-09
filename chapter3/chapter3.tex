@@ -1,7 +1,9 @@
-\chapter{Versuchsdurchführung}
-\label{chap:versuchsdurchfhrung}
-  \section{Theoretische Vorüberlegungen}
+\chapter{Versuche in der Simulation}
+\label{chap:versuche}
 
+
+
+{\color{red}
     %\lstinputlisting[caption={Eine klassische \lstinline{main.m}-Datei aus Objective-C}]{chapter3/main.m}
     Ideen zu Fragestellungen die Versuche nötig machen:
     \begin{itemize}
@@ -10,22 +12,54 @@
     \item Wie muss das Muster aufgebaut sein? Was für Fehler könne entstehen, wenn ein ungeeignetes Muster verwendet wird?
     \item Wie gut kommt der Filter mit Systematischen Fehlern zurecht?
     \end{itemize}
+}
 
-  \section{Versuchsaufbau}
+\section{Versuche zur Genauigkeit des Messmodells}
+In einer ersten Versuchsreihe, soll die Genauigkeit des im Partikel Filter verwendeten Messmodells untersucht werden. Dafür soll zu einem gegebenen Bild möglichst der gesamte Zustandsraum mit dem in Kapitel \ref{subsec:messmodell} beschriebenen Verfahren bewertet werden. Je nach dem wie viele Punkte im Zustandsraum einen hohen Score erhalten, lässt darauf schließen wie genau die Zuordnung zwischen Bild und Pose funktioniert. Im ersten Durchlauf soll erst mal grob der gesamte Raum abgesucht werden. Er soll einen Überblick geben, wo starke Antworten liegen, die dann in weiteren Durchläufen genauer abgetastet werden können.
 
-  \section{Versuchsvorbereitung}
-
-\begin{figure}[htbp]
+\begin{figure}[p]
     \centering
+    \vspace{-40pt}
+    \input{chapter3/full_6x6_5cm_005Deg.tex}
+    \vspace{-20pt}
     \input{chapter3/position_variance_on_picture.tex}
-    \caption{Bereich der zu einem Bild}
-    \label{positionVariancePicture}
+    \caption{Antwort des Messmodells zu einem Bild an der rot markierten Position oben: 5cm Raster 3° Schritte unten: 1cm Raster 0.3° Schritte}
+    \label{fig:messmodellPos}
 \end{figure}
-   
-  \section{Praktische Versuchsdurchführung}
 
-  \section{Versuchsergebnisse}
+Für die Versuchsreihe wird der Zustandsraum zunächst grob in 5~cm Rasterschritten durchsucht. Dabei wird die Orientierung in 0,05 Rad (2,86°) Schritte Aufgeteilt. In drei Schleifen wird so der Zustandsraum durchlaufen. Als Messung wurde ein am Ursprung (x = 0, y = 0, psi = 0) aufgenommenes Bild verwendet. Für die Darstellung in Abbildung \ref{fig:messmodellPos} oben, wurden Höhenlinien der Messantwort geplottet. Dabei wurde jeweils nur die stärkste Antwort an einer Position über alle Winkel gewählt. Bei einem Zweiten Durchlauf wurde die Positionsrasterung auf 1~cm Schritte, und die Winkelschritte auf 0,005 Rad (0.28°) verkleinert. Zu sehen ist dies auf Abbildung \ref{fig:messmodellPos} unten. Um den Einfluss des Winkels darzustellen wurde in Abbildung \ref{fig:messmodellAngle} die Antwort entlang einer Linie mit $x=0.0$ geplottet. 
 
-  \section{Diskussion der Ergebnisse}
+\begin{figure}[h]
+    \centering
+    \input{chapter3/pTOyANDangle_1cm_0005Deg_xIS0.tex}
+    \caption{Antwort des Messmodells bei x=0.0}
+    \label{fig:messmodellAngle}
+\end{figure}
+
+In Abbildung \ref{fig:messmodellPos} oben, kann man sehen, das die Antwort des Messmodells nur um die erwartete Position sichtbar einen hohen Score ergibt. Darunter sieht man einen Vergrößerten Ausschnitt. Hier fällt auf, dass die Häufung sich leicht schräg liegt. Dies liegt vermutlich daran, dass die Lichtwand auf der das Muster abgebildet ist, nicht zentral vor dem Roboter steht, sondern in Y-Richtung verschoben ist. Die Häufung der Antworten streut vor allem entlang der Y-Achse. Also bei einer seitlichen Verschiebung des Roboters. Dabei sind innerhalb von $\pm 30\ cm$ immer noch Scores oberhalb von 0,8 möglich. Entlang der X-Achse ist eine Streuung zwischen $+15$ und $-10$~cm zu erkennen. Durch die Höhenlinien sieht man, dass entlang der x-Achse der Score eine große Steigung hat. Dies führt zu einer relativ scharfen Kante in der in dieser Richtung. Auf der y-Achse dagegen, ist die Steigung schwäche und bildet keine so scharfe Kante. Aus Abbildung \ref{fig:messmodellAngle} lässt sich entnehmen, dass bei einer Verschiebung entlang der Y-Achse eine Drehung des Roboters nötig ist, um eine Pose zu erhalten die einen guten Score erhält.  
+\section{Versuche zur Bildaufnahmefrequenz}
+Es soll untersucht werden in welchen Intervallen Bilder benötigt werden. Wie stark der Einfluss der Fahrkurve darauf ist, und welche Faktoren die Bildaufnahmefrequenz beeinflussen können.
+\begin{figure}[p]
+    \centering
+    \vspace{-30pt}
+    \input{chapter3/every500mspics.tex}
+    \vspace{-10pt}
+    \input{chapter3/every500mspics_Loop_Clockwise.tex}
+    \caption{Fahrkurven oben gegen, und unten im Uhrzeigersinn}
+    \label{every1000mspics}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    \vspace{-30pt}
+    \input{chapter3/every500mspics_serpentinen.tex}
+    \vspace{-10pt}
+    \input{chapter3/every500mspics_Oval.tex}
+    \caption{Fahrkurven oben Serpentinen, unten Oval}
+    \label{every1500mspics}
+\end{figure}
+Dazu werden vier verschiedene Fahrkurven eingesetzt. Zu sehen auf den Abbildungen 
+\section{Versuche zum Einfluss von Menschen auf der Bühne}
+Hier sollen Versuche zeigen, wie stark Menschen auf der Bühne die Lokalisation mit dem hier vorgestellten Verfahren stören. Dabei geht es im wesentlichen darum, dass Menschen im Bild stehen, und so die Bit-Muster ganz oder teilweise verdecken.
+
   
 

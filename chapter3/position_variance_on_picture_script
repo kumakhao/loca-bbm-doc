@@ -5,6 +5,8 @@ set terminal epslatex color size 6,5
 set output "chapter3/position_variance_on_picture.tex"
 set obj 10 circle fc rgb "red"
 set obj 10 circle at graph 0.5,0.5   size graph .02  front
+set obj 11 polygon from graph 0.515,0.488 to graph 0.515,0.512 to graph 0.53,0.5 to graph 0.515,0.488
+set obj 11 fc rgb "red" fillstyle solid 
 set xrange [-0.5:0.5]
 set yrange [-0.5:0.5]
 set size ratio 1.0
@@ -16,7 +18,7 @@ set ytics -0.5,0.1,0.5
 set tics scale 0.5
 set xlabel "XAchse in Metern"
 set ylabel "YAchse in Metern"
-unset clabel
+#unset clabel
 set view map
 unset surface
 set contour base

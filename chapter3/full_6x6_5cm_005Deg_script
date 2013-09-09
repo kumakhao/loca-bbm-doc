@@ -1,0 +1,27 @@
+set terminal epslatex color size 6,5
+set output "chapter3/full_6x6_5cm_005Deg.tex"
+set obj 10 circle fc rgb "red"
+set obj 10 circle at graph 0.5,0.5   size graph .02  front
+set obj 11 polygon from graph 0.515,0.488 to graph 0.515,0.512 to graph 0.53,0.5 to graph 0.515,0.488
+set obj 11 fc rgb "red" fillstyle solid 
+set xrange [-6.5:6.5]
+set yrange [-6.5:6.5]
+set size ratio 1.0
+set zeroaxis
+set border 0
+set grid 
+set xtics -6,6,6
+set ytics -6,6,6
+set tics scale 0.5
+set xlabel "XAchse in Metern"
+set ylabel "YAchse in Metern"
+set object 2 rect from -6,6 to 2,6.2 fc rgb "black"
+set object 3 rect from 6,-2 to 6.2,6 fc rgb "black"
+set object 4 rect from -2,-6 to 6,-6.2 fc rgb "black"
+#unset clabel
+set view map
+unset surface
+set contour base
+set cntrparam levels 6
+set dgrid3d 75,75 qnorm 4
+splot "chapter3/full_6x6_5cm_005Deg" with lines lc rgb "#909090" lw 3 t ""

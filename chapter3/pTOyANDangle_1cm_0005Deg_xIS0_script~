@@ -1,0 +1,22 @@
+#set terminal pngcairo  transparent enhanced font "arial,10" fontscale 1.0 size 500, 350 
+#set output 'contours.21.png'
+#set key below
+set terminal epslatex color size 6,5
+set output "chapter3/pTOyANDangle_1cm_0005Deg_xIS0.tex"
+set xrange [-6:6]
+set yrange [-0.5:0.5]
+set size ratio 1
+set zeroaxis
+set border 0
+set grid 
+set xtics -6,1,6
+set ytics -0.5,0.1,0.5
+set tics scale 0.5
+set xlabel "YAchse Winkel in Grad"
+set ylabel "XAchse in Metern"
+#unset clabel
+set view map
+unset surface
+set contour base
+set dgrid3d 150,150 qnorm 8
+splot "chapter3/pTOyANDangle_1cm_0005Deg_xIS0" with lines lc rgb "#000000" lw 3 t ""
