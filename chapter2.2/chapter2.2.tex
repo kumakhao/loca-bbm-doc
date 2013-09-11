@@ -5,6 +5,19 @@ Die Software die im Rahmen dieser Arbeit entwickelt wurde, ist in C++ geschriebe
 \label{sec:simulation}
 Grundlage der Simulation ist das 3D Grafiktoolkit \ac{OCG}\footnote{\url{http://www.openscenegraph.org/}}. Damit lässt sich eine 3D Szene in Form eines Graphen aufbauen und mit einem Viewer darstellen. Um den Ablauf kontrollieren zu können, lässt sich die Render-Schleife manuell aufrufen um jeden Frame einzeln berechnen zu lassen. Dies wurde als Simulationsschritt gewählt in dem alle nötigen Berechnungen durchgeführt werden können. Da die Geschwindigkeit mit der die Simulation im manuellen Modus abläuft nicht begrenzt wird, wurde eine Mindestbearbeitungszeit integriert. Denn die Geschwindigkeiten von Objekten in der Simulation, wie dem Roboter, werden durch eine zurückgelegte Strecke pro Simulationsschritt festgelegt. Bei sehr schneller Hardware ergab dies eine zu hohe Bewegungsrate um den Roboter noch manuell steuern zu können. Für automatisierte Simulationsläufe mit festgelegten Fahrprofilen könnte man diese Begrenzung wieder lösen um Zeit zu sparen.
 
+\subsection{Koordinatensysteme}
+\label{subsec:koordinatensysteme}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{chapter2.2/opencvgl_coords.png}
+    \caption[Koordinatensysteme in der Simulation]{Koordinatensysteme in der Simulation}
+    \label{fig:koordinatensysteme}
+\end{figure}
+OpenGL und OpenCV definieren die Koordinatensysteme für eine Kamera sehr unterschiedlich. Um die Pose der Kamera aus der Simulation (OpenGL Koordinatensystem) in die extrinsischen Kamera Parameter zu transformieren, wie OpenCV sie versteht, muss bekannt sein wie diese beiden Systeme zum Weltkoordinatensystem in der Simulation orientiert sind. In Abbildung \ref{fig:koordinatensysteme} sind alle drei Koordinatensysteme eingezeichnet. 
+Kamera OpenCV
+Kamera OpenGL
+Simulation
 \subsection{Die Szene}
 \label{subsec:dieSzene}
 Die Szene in der Simulation ist aus mehreren Komponenten aufgebaut, die im Folgenden näher beschrieben werden. Dabei wird ein Vergleich zu den echten Elementen auf der Bühne gezogen, um zu erläutern wie deren Attribute in der Simulation abgebildet werden können. In Abbildung \ref{fig:bildderszene} kann man alle Elemente der Szene erkennen. 
@@ -55,6 +68,23 @@ Eine \textbf{systematische Abweichung} die nur bei Drehungen auftritt. Dies ist 
 Eine \textbf{zufällige Abweichung} bei den Inkrementschritten soll ein mögliches Spiel in Kupplung oder Getriebe simulieren. Dabei wird zu dem akkumulierten Inkrementalwert eines Rades ein Gaußsches Rauschen addiert, welches proportional zur letzten Winkeländerung ist. Ist diese bei Stillstand gleich Null, so wird nur ein schwaches Grundrauschen addiert.
 
 \subsubsection*{Bilder der Kamera}
+\label{subsec:bilderderkamera}
+Die Kamera des Roboters wird in der Simulation nicht als Modell angezeigt. Sondern lediglich durch ein Objekt der Klasse osgViewer::View implementiert. Um einer echten Kamera möglichst nah zu kommen, wurde die Auflösung sowie der Öffnungswinkel der am Roboter verbauten Kamera in der Simulation nach empfunden. Die Auflösung der Bilder ist mit 1280~x~720 Pixeln im 16:9 Format. Der Horizontale Öffnungswinkel beträgt 74~Grad. Die verwendete OSG Bibliothek setzt auf OpenGL auf und nutzt deshalb auch die dort verwendeten Funktionen zur Perspektivischen Projektion. In Abbildung \ref{fig:OpenGLfrustum} ist zu sehen, wie diese in OpenGL beschrieben wird. Ein Pyramiden Stumpf begrenzt dabei ein Volumen, in dem alle sichtbaren Objekte liegen. Alles, dass sich außerhalb dieses Bereiches befindet ist im Bild nicht zu sehen. Dieser Pyramiden Stumpf wird auch \textbf{frustum} genannt, und seine Eigenschaften werden üblicher Weise in einer Projektionsmatrix zusammen gefasst. Diese lässt sich direkt setzten, oder über eine Hilfsfunktion durch folgende vier Parameter definieren:
+\begin{description}
+\item[fovy] Gibt den vertikalen Öffnungswinkel in Grad an.
+\item[aspect] Gibt das Verhältnis zwischen horizontalem und vertikalem Öffnungswinkel an. Er sollte gleich dem Seitenverhältnis der Bildauflösung gewählt werden, um keine Verzerrungen zu bekommen. (Breite/Höhe)
+\item[zNear] Gibt den Abstand zwischen Betrachter und Projektionsfläche an. Sie wird auch zum clipping verwendet. (immer positiv)
+\item[zFar] Gibt den Abstand zur hinteren clipping Ebene an. Alles was weiter als diese Ebene entfernt ist, wird nicht mit auf das Bild projiziert. (immer positiv)
+\end{description}
+\begin{figure}[h]
+	\center
+	\includegraphics[width=1.0\textwidth]{chapter2.2/800px-Field_of_view_angle_in_view_frustum.png}
+	\caption[OpenGL frustum]{OpenGL beschreibt die perspektivische Projektion mit Hilfe eines \textbf{frustum}}
+	\label{fig:OpenGLfrustum}
+\end{figure}
+OpenGL projiziert zunächst auf eine normalisierte Bildebene. Aus dieser normalisierten Darstellung muss mittels einer Viewporttransformation in die Bildschirmkoordinaten (Pixel) umgerechnet werden. Der Viewport ist dabei der Bildschirmbereich, auf den das fertig gerenderte Bild angezeigt wird. Mit OSG lässt sich der Viewport für eine Kamera einfach mit der gewünschten Auflösung (Höhe, Breite) und einem Ursprung setzten. Die Matrix für die Viewporttransformation heißt in OSG windowMatrix, und wird automatisch aus dem gesetzten Viewport berechnet.
+
+Die Bilder der Roboter Kamera werden aber nicht auf dem Bildschirm angezeigt, sondern in einen Buffer geschrieben und von dort in ein für OpenCV nutzbares Format kopiert. In dieser Form werden die Bilder auf der Festplatte gespeichert und an die Lokalisation als Messupdate gegeben.
 
 \section{Lokalisation}
 \label{sec:lokalisation}
