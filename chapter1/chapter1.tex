@@ -1,7 +1,7 @@
 \chapter{Einleitung}
 \label{chap:einleitung}
 
-In dieser Arbeit soll, mit Hilfe einer Simulation, untersucht werden, wie gut sich Kameras bei der Standortbestimmung in mobilen Roboter einsetzten lassen. Anlass dieser Arbeit war eine Anfrage der Künstlergruppe \ac{BBM}, die schon bei mehreren Performances\footnote{unter Anderem:
+In dieser Arbeit soll, mit Hilfe einer Simulation, untersucht werden, wie gut sich Kameras bei der Standortbestimmung in mobilen Roboter einsetzen lassen. Anlass dieser Arbeit war eine Anfrage der Künstlergruppe \ac{BBM}, die schon bei mehreren Performances\footnote{unter Anderem:
   
   2000 Themenpark "Wissen" der Expo 2000 Hannover
   
@@ -9,7 +9,7 @@ In dieser Arbeit soll, mit Hilfe einer Simulation, untersucht werden, wie gut si
   
   2012 EPKOT Experimental Prototype Killers of Tomorrow , Hannover
   
-  siehe auch \url{ http://www.bbm.cfnt3.de}} mobile Roboter eingesetzt haben. Dabei interessierten sie sich für eine Lokalisierungslösung welche möglichst ohne weitere spezial Hardware und geringem Installationsaufwand vor Ort auskommt. Der Ansatz der daraus entstand war: die Kameras, die bereits an jedem der Roboter verbaut waren, zu nutzen um markante Muster in der Bühneninstallation zu erkennen und gemeinsam mit den Odometrie-Daten zur Positionsberechnung zu verwenden. Dabei sollte ein Partikelfilter als Zustandsschätzer verwendet werden. Zu der Bühneninstallation gehören große Lichtwände, zu sehen auf Abbildung \ref{fig:RobotAndGuests} und \ref{fig:RobotAndLightwall}. Auf diese Lichtwände könnte ein hell/dunkel Bit-Muster angezeigt werden das es mit Hilfe geeigneter Bildverarbeitungsalgorithmen und mit den Kameras zu erkennen gilt.
+  siehe auch \url{ http://www.bbm.cfnt3.de}} mobile Roboter eingesetzt haben. Diese fahren zum Teil in einer Choreografie über die Bühne. Um sie dabei eine vorgegebene Figur fahren zu lassen, muss der Steuerung bekannt sein, wo sich ein Roboter auf der Bühne aufhält. Eine solche Lokalisation war in der Vergangenheit für BBM sehr aufwendig. Deshalb interessierten sie sich für eine Lokalisierungslösung welche möglichst ohne weitere Spezialhardware und geringem Installationsaufwand vor Ort auskommt. Der Ansatz der daraus entstand war: die Kameras, die bereits an jedem der Roboter verbaut waren, zu nutzen um markante Muster in der Bühneninstallation zu erkennen. Zusammen mit Messungen der Odometrie, sie beschreibt wie die Räder eines Roboters sich bei Bewegung drehen, soll die Position und Orientierung berechnet werden. Ein Partikelfilter wäre als Zustandsschätzer zu verwendet werden. Zu der Bühneninstallation gehören große Lichtwände, zu sehen auf Abbildung \ref{fig:RobotAndGuests} und \ref{fig:RobotAndLightwall}. Auf diese Lichtwände könnte ein hell/dunkel Bit-Muster angezeigt werden das es mit Hilfe geeigneter Bildverarbeitungsalgorithmen und mit den Kameras zu erkennen gilt.
 
   \begin{figure}[p]
     \centering
