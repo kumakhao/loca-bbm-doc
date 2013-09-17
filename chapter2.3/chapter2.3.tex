@@ -80,12 +80,26 @@ Durch Multiplikation der Transformationmatrizen
 \begin{equation}
 M_K=T_K^R \cdot T_R^W \cdot M_W
 \end{equation}
-erhält man die Koordinaten der Bitmuster im Kamerasystem $M_K$. Diese können nun mit der intrinsichsen Kameramatrix
+erhält man die Koordinaten der Bitmuster im Kamerasystem $M_K$. Diese können nun mit einer perspektivischen Projektion
 \begin{equation}
-K_i = \left( \begin{array}{cccc}
-f_x & 0 		& 0		& c_x \\
-0 	& f_y 	& 0		& c_y \\
-0 	& 0 		& 1 		& 1\end{array} \right)
+P\left(\begin{array}{c}
+x\\
+y\\
+z\\
+1
+\end{array}\right)=
+\left(\begin{array}{c}
+\frac{x}{z} \\
+\frac{y}{z} \\
+1
+\end{array}\right)
+\end{equation}
+und der intrinsichsen Kameramatrix
+\begin{equation}
+K_i = \left( \begin{array}{ccc}
+f_x & 0 		& c_x \\
+0 	& f_y 	& c_y \\
+0 	& 0 		& 1\end{array} \right)
 \end{equation}
 in eine Punktmenge in Pixelkoordinaten $M_P$ projiziert werden
 \begin{equation}
