@@ -49,13 +49,19 @@ Die Simulation soll, neben der Visualisierung, Messungen liefern um den Lokalisa
 
 \subsubsection*{Messwerte der Inkrementalgeber}
 Wie beim Robotermodell schon beschrieben, wird in der Simulation dessen X/Y-Koordinate sowie der Winkel zur X-Achse als Repräsentation der Pose verwendet. Aus den Positions- ($ \Delta s $) und Orientierungsänderungen ($ \Delta \psi $), in jedem Simulationsschritt, werden Drehwinkeländerungen ($ \Delta \alpha_{r/l} $) der beiden Räder berechnet:
-\[\Delta \alpha_{rechts} = \frac{\Delta s + \Delta \psi \cdot D_r}{R_{r}} \]
-\[\Delta \alpha_{links} = \frac{\Delta s - \Delta \psi \cdot D_l}{R_{l}} \]
+\begin{align}
+\Delta \alpha_{rechts} &= \frac{\Delta s + \Delta \psi \cdot D_r}{R_{r}} \\ 
+\Delta \alpha_{links} &= \frac{\Delta s - \Delta \psi \cdot D_l}{R_{l}} 
+\end{align}
 mit Abstand $ D_{r/l} $ des Rades von der Mitte der Achse und Radradius $ R_{rad} $. Die Drehwinkeländerungen werden aufsummiert um die Radstellungen zu speichern:
-\[\alpha = \alpha + \Delta \alpha\]
+\begin{align}
+\alpha = \alpha + \Delta \alpha
+\end{align}
 Aus diesen Winkelstellungen\footnote{Die Winkelstellung der Räder wird nur numerisch simuliert und ist am Modell nicht sichtbar.}  der Räder wird ein Wert für die Inkrementalgeber abgeleitet und auf ganze Inkremente gerundet:
-\[I_{rechts} = \alpha_{rechts} \cdot \frac{g\ \gamma}{2\pi}\]
-\[I_{links} = \alpha_{links} \cdot \frac{g\ \gamma}{2\pi}\]
+\begin{align}
+I_{rechts} &= \alpha_{rechts} \cdot \frac{g\ \gamma}{2\pi}\\
+I_{links} &= \alpha_{links} \cdot \frac{g\ \gamma}{2\pi}
+\end{align}
 mit Getriebeübersetzung: $ g $ und Inkrementalgeber Auflösung(pro Umdrehung): $ \gamma $
 
 \subsubsection*{Messabweichung des Inkrementalgebers}

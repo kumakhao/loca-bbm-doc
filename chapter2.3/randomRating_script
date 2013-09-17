@@ -1,0 +1,6 @@
+set terminal epslatex color size 5.3,3
+set output "chapter2.3/randomRating.tex"
+unset xtics
+set ylabel "Score"
+set xlabel "Posen aus dem Zustandsraum"
+plot 'chapter2.3/randomRating' t "Score der \374ber dem Minimum liegt"

@@ -85,7 +85,22 @@ In diesem Fall wird ein fester Score gegeben, der nicht 0 sein darf. Genau 0 wär
 \item[Wahrer Zustand lässt kein Muster zu:] Der Roboter und damit die Kamera stehen so zu den Lichtwänden, dass sich kein Bit-Muster im Bild befindet. Damit gibt es, bei Partikeln die dieser Ausrichtung entsprechen, keine Punkte im Bild die sich auswerten lassen. Würde man einen Score von 0 geben, so würde der richtige Zustand, wegen der Multiplikation und anschließendem Resampling, gelöscht werden! Dies ist nicht erwünscht. Eine mögliche Lösung wäre in diesem Fall das Partikel mit einem mittlerem Score zu bewerten um den richtigen Zustand zu schützen. Ein zu hoher Score wäre jedoch im Folgenden Fall ungünstig.
 \item[Falscher Zustand lässt kein Muster zu:] Ein Partikel, dessen Zustand stark von der wahren Pose abweicht, führt zu keinen Bildpunkten für das Bit-Muster. Im Bild befindet sich aber ein Bit-Muster. Deshalb müsste es andere Partikel geben, deren Zustände zum Bild passen und nicht automatisch einen festen Score bekommen. Würde nun, wie im ersten Fall vorgeschlagen, ein mittlerer Score gegeben, würde dieses Partikel überbewertet werden. Im Vergleich zu Partikeln dessen Zustand ein Bit-Muster an falscher Stelle vorhersagt, wäre dieser Fall erheblich besser bewertet. Auch wenn ein kleiner Wert gewählt wird, könnte eine ungünstige Vorhersage bei einem anderen Partikel einen schlechteren Score ergeben. Angestrebt wäre aber, dass dieser zweite Fall möglichst schlecht bewertet wird.
 \end{description}
-Deshalb wird ein Minimalscore von 0,001 festgelegt der in diesen Fällen gegeben wird. Zudem wird auch bei vorhandenem Bildpunkten für Bit-Muster bei dessen Auswertung mindestens dieser Minimalscore gegeben. Dadurch werden beim ersten Fall, bei dem kein richtiges Bit-Muster zum Auswerten im Bild ist, alle Partikel gleich bewertet. Da es kein Partikel gibt, das einen hohen Score bekommen kann. Es muss nur sichergestellt werden, dass die Auswertung beliebiger Bildpunkte als Bit-Muster den Minimalscore nicht übertrifft. Werden alle mit dem selben Score bewertet, bleibt das Gewicht der Partikel ebenfalls gleich. Dies führt beim Resampling dazu, dass die Partikelverteilung erhalten bleibt. Beim zweiten Fall sollte es andere Partikel geben, deren Zustand zu dem Bild passt und die damit einen höheren Score bekommen. Wäre dies nicht der Fall, so wäre die Lokalisation fehlgeschlagen. Dadurch, dass der Minimalscore die geringste Bewertung ist die ein Partikel bekommen kann, gibt es das Problem einer Überbewertung nicht mehr.
+Deshalb wird ein Minimalscore von 0,01 festgelegt der in diesen Fällen gegeben wird. Zudem wird auch bei vorhandenem Bildpunkten für Bit-Muster bei dessen Auswertung mindestens dieser Minimalscore gegeben. Dadurch werden beim ersten Fall, bei dem kein richtiges Bit-Muster zum Auswerten im Bild ist, alle Partikel gleich bewertet. Da es kein Partikel gibt, das einen hohen Score bekommen kann. Es muss nur sichergestellt werden, dass die Auswertung beliebiger Bildpunkte als Bit-Muster den Minimalscore möglichst nicht übertrifft. Um dies zu prüfen, wurde zu einem Testbild (siehe Bild \ref{fig:randomRating}) für 1,8 Millionen Posen, die gleichmäßig über den Zustandsraum verteilt waren, der Score berechnet. Nur 136 davon lagen über dem Minimalscore von 0,01. Wie in Bild \ref{fig:randomRating} unten zu sehen, gibt es keine starke Häufung der Scores die über dem Minimum liegen, zudem ist kein Score über 0,25. Eine so geringe Anzahl von Überschreitungen des Minimalscores wird als akzeptabel angesehen.
+\vspace{10pt}
+\begin{figure}[h]
+	\framebox[\textwidth]{
+	\begin{minipage}{\textwidth} 
+		\vspace{-20pt}
+		\includegraphics[width=\textwidth]{chapter2.3/0000.jpg}	\newline
+		\input{chapter2.3/randomRating.tex}
+	\end{minipage}
+	}
+	\caption{1,8 Millionen Posen wurden mit dem Bild Oben Bewertet. Nur 136 davon liegen über dem Minimalscore}
+	\label{fig:randomRating}
+\end{figure}
+
+Werden alle mit dem selben Score bewertet, bleibt das Gewicht der Partikel ebenfalls gleich. Dies führt beim Resampling dazu, dass die Partikelverteilung erhalten bleibt. Beim zweiten Fall sollte es andere Partikel geben, deren Zustand zu dem Bild passt und die damit einen höheren Score bekommen. Wäre dies nicht der Fall, so wäre die Lokalisation fehlgeschlagen. Dadurch, dass der Minimalscore die geringste Bewertung ist die ein Partikel bekommen kann, gibt es das Problem einer Überbewertung nicht mehr.
+
 
 
 \subsection{Mindestanzahl Auswertbarer Bildpunkte}
@@ -118,10 +133,11 @@ mit $\kappa_{min}$ als Parameter lässt sich einstellen bis zu welcher Größe sich
 \begin{equation}
 \hat{p}=\frac{1}{n}\sum\limits_{i=1}^n (h_i-\hat{h}_{w/s})^2\cdot\frac{\kappa_{min}^2}{\kappa^2}
 \end{equation}
-Die Bildung des Mittelwertes ist nötig, damit der Score unabhängig von der Anzahl der Bits im Bild bleibt. Eine einfache Summe würde dazu führen, dass viele Bits einen schlechteren Score bekommen. Der letzte Schritte der Bewertung ist eine Exponentialfunktion mit negativem Exponenten:
+Die Bildung des Mittelwertes ist nötig, damit der Score unabhängig von der Anzahl der sichtbaren Bits bleibt. Eine einfache Summe würde dazu führen, dass viele Bits einen schlechteren Score bekommen als wenige. Der letzte Schritte der Bewertung ist eine Exponentialfunktion mit negativem Exponenten:
 \begin{equation}
 P = e^{-\frac{\hat{p}}{2}}
 \end{equation}
+Sie führt bei sehr kleinem $\hat{p}$ zu einem Score nahe 1, während bei großem $\hat{p}$ der Score gegen 0 geht. Dieses Verhalten ist nötig um den Score mit dem Gewicht der Partikel multiplizieren zu können. Sie stellt sicher, dass der Score $P$ immer im Intervall $[0..1]$ bleibt
 \section{Parameter einstellen}
 \label{sec:parameter_loca}
 {\color{red}
