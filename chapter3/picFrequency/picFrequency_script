@@ -6,7 +6,9 @@ set style data histograms
 set style histogram cluster
 set style histogram clustered gap 3
 set style fill solid 1.0 border lt-1
-set yrange [0:0.5]
+set yrange [0:3]
+set xlabel "Zeit zwischen zwei Bildern in Millisekunden"
+set ylabel "Mittlerer Abstand zum sollwert in Metern"
 set key autotitle columnhead
 plot 'chapter3/picFrequency/oval_data' using 2:xticlabels(1),\
 'chapter3/picFrequency/serpentinen_data' using 2,\
