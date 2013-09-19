@@ -1,12 +1,12 @@
-\chapter{Software}
-\label{chap:software}
+\chapter{Die Simulationssoftware}
+\label{chap:simsoftware}
 Die Software die im Rahmen dieser Arbeit entwickelt wurde, ist in C++ geschrieben. Als Entwicklungsumgebung wurde Eclipse mit den \ac{CDT} auf einem Linux\footnote{Ubuntu 12.04 LTS}  Betriebssystem verwendet.
-\section{Simulation}
-\label{sec:simulation}
+
+
 Grundlage der Simulation ist das 3D Grafiktoolkit \ac{OSG}\footnote{\url{http://www.openscenegraph.org/}}. Damit lässt sich eine 3D Szene in Form eines Graphen aufbauen und mit einem Viewer darstellen. Um den Ablauf kontrollieren zu können, lässt sich die Render-Schleife manuell aufrufen um jeden Frame einzeln berechnen zu lassen. Dies wurde als Simulationsschritt gewählt in dem alle nötigen Berechnungen durchgeführt werden können. Da die Geschwindigkeit mit der die Simulation im manuellen Modus abläuft nicht begrenzt wird, wurde eine Mindestbearbeitungszeit integriert. Denn die Geschwindigkeiten von Objekten in der Simulation, wie dem Roboter, werden durch eine zurückgelegte Strecke pro Simulationsschritt festgelegt. Bei sehr schneller Hardware ergab dies eine zu hohe Bewegungsrate um den Roboter noch manuell steuern zu können. Für automatisierte Simulationsläufe mit festgelegten Fahrprofilen könnte man diese Begrenzung wieder lösen um Zeit zu sparen.
 
-\subsection{Koordinatensysteme}
-\label{subsec:koordinatensysteme}
+\section{Koordinatensysteme}
+\label{sec:koordinatensysteme}
 
 \begin{figure}[h]
     \centering
@@ -18,8 +18,8 @@ OpenGL und OpenCV definieren die Koordinatensysteme für eine Kamera sehr untersc
 Kamera OpenCV
 Kamera OpenGL
 Simulation
-\subsection{Die Szene}
-\label{subsec:dieSzene}
+\section{Die Szene}
+\label{sec:dieSzene}
 Die Szene in der Simulation ist aus mehreren Komponenten aufgebaut, die im Folgenden näher beschrieben werden. Dabei wird ein Vergleich zu den echten Elementen auf der Bühne gezogen, um zu erläutern wie deren Attribute in der Simulation abgebildet werden können. In Abbildung \ref{fig:bildderszene} kann man alle Elemente der Szene erkennen. 
 \begin{description} 
 \item[Die Grundfläche (1)] der Bühne misst 12 x 12 m. Sie wird als einfach weiße Fläche in der Szene dargestellt. Da die Bildverarbeitung nur auf den Oberen Teil des Bildes beschränkt ist, spielen Farbe und Helligkeit keine Rolle bei der Erkennung des Musters im Bild.
@@ -33,7 +33,7 @@ Die Szene in der Simulation ist aus mehreren Komponenten aufgebaut, die im Folge
 \end{figure}
 
 \begin{description}
-\item[Die Lichtwände (2,3)] sind zu drei Seiten der Grundfläche aufgestellt. Sie messen 3m in der Höhe und 8m  in der Länge. Wie bereits in @@@@@@@@ beschrieben soll das Muster in der obersten Zeile der Lichtwände dargestellt werden. Hierzu können verschiedene Texturen geladen werden die das Bitmuster enthalten. In der Realität sind die Lichtwände auf der Bühne aus 1 x 1 Meter großen Segmenten zusammen gesetzt, dies wird in der Simulation nicht abgebildet. Es wäre jedoch denkbar, dies in den Aufbau der Texturen einfließen zu lassen durch leichte Abstandsänderungen der Bits in der Textur.
+\item[Die Lichtwände (2,3)] sind zu drei Seiten der Grundfläche aufgestellt. Sie messen 3m in der Höhe und 8m  in der Länge. Wie bereits in Abschnitt \ref{sec:bitmuster} beschrieben soll das Muster in der obersten Zeile der Lichtwände dargestellt werden. Hierzu können verschiedene Texturen geladen werden die das Bitmuster enthalten. In der Realität sind die Lichtwände auf der Bühne aus 1 x 1 Meter großen Segmenten zusammen gesetzt, dies wird in der Simulation nicht abgebildet. Es wäre jedoch denkbar, dies in den Aufbau der Texturen einfließen zu lassen durch leichte Abstandsänderungen der Bits in der Textur.
 Auf jedem Segment sind 8 x 8 Bits unter gebracht. Das macht eine Kantenlänge von 125 mm bei jedem dieser Pixel und 64 Pixel über die ganze Länge einer Wand. Ein solches Segment besteht aus einer Milchigen Plexiglasplatte, die auf eine Struktur geschraubt wurde die für jedes Pixel ein Leuchtmittel vorsieht. Dessen Helligkeit lässt sich einstellen, wäre aber für das Bitmuster auf die Zustände: dunkel(ausgeschaltet) oder hell(ein, mit größter Helligkeit) einzustellen. Die Plexiglasplatte wird also pro Pixel von hinten durchleuchtet. Dies führt dazu, dass die Helligkeitsverteilung in einem beleuchteten Pixel inhomogen ist. In der Mitte ist die größte Helligkeit, während sie radial nach außen etwas abnimmt. Die Ecken der Pixel sind die dunkelsten Stellen. Auf Abbildung \ref{fig:RobotAndLightwall} auf Seite \pageref{fig:RobotAndLightwall} ist dieser Effekt gut zu sehen. Er wird besonders stark, wenn die Leuchtmittel mit niedriger Helligkeit betrieben werden. Bei hoher Helligkeit ist der Effekt noch wahrnehmbar, aber nicht mehr so ausgeprägt. Und noch etwas fällt auf wenn man dieses Bild betrachtet. Die Lichtfarbe und Helligkeit variiert leicht von Pixel zu Pixel. All diese Effekte können in der Simulation durch verändern der Texturen abgebildet werden.
 
 \item[Der Roboter (4)] wird nur duch einen weißen Würfel dargestellt. Die genaue Form und das Aussehen spielen für die Lokalisation keine Rolle. Die Kameras sind so angebracht, dass der Roboter selbst nicht im Bild zu sehen ist. Der Würfel ist für den Bediener gedacht, der die Szene aus einem Blickwinkel hinter dem Roboter steuert. Das Bild \ref{fig:bildderszene} ist aus diesem Blickwinkel aufgenommen. Der Roboter lässt sich mit den Tasten W, A, S, D (vorwärts, links, rückwärts, rechts) grob verfahren oder mit einem Pad\footnote{PlayStation 3 Wireless Sixaxis Controller} mit Analogsticks auch präziser steuern. Die Steuerbefehle für den Roboter werden als Geschwindigkeit (gerade aus) und Drehrate interpretiert. Diese führen dann, in jedem Simulationsschritt zu einer Positionsänderung. Es wird erst eine Drehung um die Hälfte der Winkeländerung durchgeführt. Anschließend wird in die neuer Richtung geradeaus die Streckenänderung zurück gelegt. Und mit einer zweiten Drehung bis zur vollen Winkeländerung wird die Bewegung abgeschlossen.
@@ -43,11 +43,12 @@ Auf jedem Segment sind 8 x 8 Bits unter gebracht. Das macht eine Kantenlänge von
 \item[Partikel (6)] werden zur Veranschaulichung und zu debugging Zwecken visualisiert. Sie werden durch rote kleine spitze Dreiecke dargestellt. Der spitze Winkel zeigt dabei die Orientierung an. Sie befinden sich nur auf dem Boden und beeinträchtigen die Bildverarbeitung deshalb nicht.
 \end{description}
 
-\subsection{Messen in der Simulation}
-\label{subsec:MessenInDerSimulation}
+\section{Messen in der Simulation}
+\label{sec:MessenInDerSimulation}
 Die Simulation soll, neben der Visualisierung, Messungen liefern um den Lokalisationsalgorythmus testen zu können. Anders als bei Messungen an realen Experimenten hat man in der Simulation den Vorteil, alle das Messergebnis beeinflussenden Faktoren unter Kontrolle zu haben. Möchte man also, dass Messungen eine systematische Abweichung aufweisen, muss diese in der Simulation definiert werden. Genau so verhält es sich mit statistischen Abweichungen. Es lassen sich also schnell die Messunsicherheiten der simulierten Vorgänge anpassen. Beim Debugging und Funktionstest des Lokalisationsalgorythmus wurde die Unsicherheit zum Beispiel zeitweise entfernt.
 
-\subsubsection*{Messwerte der Encoder}
+\subsection{Messwerte der Encoder}
+\label{subsec:encoderWerteInSim}
 Wie beim Robotermodell schon beschrieben, wird in der Simulation dessen X/Y-Koordinate sowie der Winkel zur X-Achse als Repräsentation der Pose verwendet. Aus den Positions- ($ \Delta s $) und Orientierungsänderungen ($ \Delta \psi $), in jedem Simulationsschritt, werden Drehwinkeländerungen ($ \Delta \alpha_{r/l} $) der beiden Räder berechnet:
 \begin{align}
 \Delta \alpha_{rechts} &= \frac{\Delta s + \Delta \psi \cdot D_r}{R_{r}} \\ 
@@ -64,7 +65,8 @@ I_{links} &= \alpha_{links} \cdot \frac{g\ \gamma}{2\pi}
 \end{align}
 mit Getriebeübersetzung: $ g $ und Encoder-Auflösung(pro Umdrehung): $ \gamma $
 
-\subsubsection*{Messabweichung der Encoder}
+\subsection{Messabweichung der Encoder}
+\label{subsec:encoderFehlerInSim}
 Es können drei verschiedene Typen von Messabweichungen simuliert werden:
 
 Eine \textbf{systematische Abweichung} bei der Umrechnung vom Radwinkel in Encoderimpulse. Dies führt zu einem sich akkumulierenden Fehler in der Gefahrenen Strecke und der Orientierung. In der Simulation wurde diese Art Unsicherheit durch einen veränderten Radradius erzeugt. Für beide Räder wird vor jedem Simulationslauf in einem Fehlerintervall der Radius leicht verändert. Je stärker die Radien sich unterscheiden, umso stärker scheint der Roboter bei geradeaus Fahrt zu einer Seite zu driften. Diese Art Messabweichung ist also über die Dauer eine Simulation konstant, aber für jeden Simulationslauf zufällig.
@@ -73,7 +75,7 @@ Eine \textbf{systematische Abweichung} die nur bei Drehungen auftritt. Dies ist 
 
 Eine \textbf{zufällige Abweichung} bei den Encoder-Messwerten soll ein mögliches Spiel in Kupplung oder Getriebe simulieren. Dabei wird zu dem akkumulierten Encoder-Wert eines Rades ein Gaußsches Rauschen addiert, welches proportional zur letzten Winkeländerung ist. Ist diese bei Stillstand gleich Null, so wird nur ein schwaches Grundrauschen addiert.
 
-\subsubsection*{Bilder der Kamera}
+\subsection{Bilder der Kamera}
 \label{subsec:bilderderkamera}
 Die Kamera des Roboters wird in der Simulation nicht als Modell angezeigt. Sondern lediglich durch ein Objekt der Klasse osgViewer::View implementiert. Um einer echten Kamera möglichst nah zu kommen, wurde die Auflösung sowie der Öffnungswinkel der am Roboter verbauten Kamera in der Simulation nach empfunden. Die Auflösung der Bilder ist mit 1280~x~720 Pixeln im 16:9 Format. Der Horizontale Öffnungswinkel beträgt 74~Grad. Die verwendete OSG Bibliothek setzt auf OpenGL auf und nutzt deshalb auch die dort verwendeten Funktionen zur Perspektivischen Projektion. In Abbildung \ref{fig:OpenGLfrustum} ist zu sehen, wie diese in OpenGL beschrieben wird. Ein Pyramiden Stumpf begrenzt dabei ein Volumen, in dem alle sichtbaren Objekte liegen. Alles, dass sich außerhalb dieses Bereiches befindet ist im Bild nicht zu sehen. Dieser Pyramiden Stumpf wird auch \textbf{frustum} genannt, und seine Eigenschaften werden üblicher Weise in einer Projektionsmatrix zusammen gefasst. Diese lässt sich direkt setzten, oder über eine Hilfsfunktion durch folgende vier Parameter definieren:
 \begin{description}

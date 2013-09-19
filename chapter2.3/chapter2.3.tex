@@ -10,7 +10,7 @@
   \end{wrapfigure}
 In diesem Kapitel soll das in dieser Arbeit entwickelte Verfahren beschrieben werden, mit dem die Lokalisierung erfolgt. Dabei wird erklärt wie das zu erkennende Bitmuster aufgebaut ist, wie der eingesetzte Partikelfilter ausgelegt wurde, und wie genau der Filter die Bilder beurteilt. Im letzten Abschnitt wird auf verschiedene Parameter eingegangen, die Einstellmöglichkeiten des Filters erlauben.
 \section{Bitmuster}
-\label{bitmuster}
+\label{sec:bitmuster}
 Die drei Bitmuster, in der Obersten Zeilen der Lichtwände, sind 64 Bit lang, da eine Lichtwand aus 8 Segmenten mit je 8 Bit aufgebaut ist. Jedes Segment ist 1~m lang. Damit ist ein Bit 125~x~125~mm groß. Als Muster wurde eine Zeichenfolge in Strichcode verwendet. Als Codierung wurde ein Verfahren gewählt, das Code 93\footnote{Quelle: http://www.suchymips.de/de/code-93.htm} genannt wird und von der Firma Intermec entwickelt wurde. Er codiert 48 verschiedene Zeichen in 9 Bit lagen Blöcken. Dabei sind mindestens 3 Bit immer \textbf{true}(1) und 3 immer \textbf{false}(0). Außerdem können höchstens 4 gleiche Bits auf einander folgen. Code 93 wurde gewählt, weil es schnell zu implementieren war, und sicher stellen konnte, dass es auch in beliebigen Ausschnitten der Muster genug Unterschiede zwischen den Lichtwänden gab. Auf Abbildung \ref{fig:bitmuster} sieht man die drei verwendeten Codestreifen. Rechts daneben sind die Zeichen für den codierten Abschnitt angegeben. Es sind 9 Bit lange Blöcke. Es gibt 7 solcher Blöcke die 63 Bits füllen, das letzte Bit ist bei zwei schwarz und einem weiß gewählt worden. Eine vollständige Tabelle der Codierung ist im Anhang auf Seite \pageref{fig:code93table} zu sehen.
 
 
@@ -111,7 +111,7 @@ M_P = K_i\cdot M_K
 Beim Start der Lokalisation muss den Partikeln eine Anfangsposition zugewiesen werden. Dies ist das in Abschnitt \ref{sec:lokalisation} beschriebene Teilproblem der Globalen Lokalisation. Eine übliche Vorgehensweise um einen sinnvollen Anfangszustand zu erhalten, ist die erste Messung zu verwenden und den gesamten Zustandsraum nach korrespondierenden Zuständen zu durchsuchen. Da ein durchsuchen des gesamten Raumes sehr lange dauern würde, wurde dieser eingegrenzt und damit eine Forderung an die Anfangs Pose des Roboters gestellt. Für die anfängliche Globale Lokalisierung muss der Roboter das Bit-Muster der mittleren Lichtwand sehen können. Es wird gefordert, das er in Richtung x-Achse ausgerichtet ist mit einer Toleranz von $\mp$ 20° der Blickrichtung. An die genaue Position auf der Bühne wird keine weitere Anforderung gestellt, solange das Bit-Muster im Bild ist, und der Blickwinkel in der Toleranz ist. In einer realen Anwendung würde der Roboter etwa mittig auf die Bühne gestellt und in Richtung der mittleren Lichtwand gedreht werden. Diese Globale Lokalisation würde ein paar Minuten brauchen und danach könnte der Roboter seinen Programmierten Weg abfahren. Da die Lokalisation nur einmal zu Beginn stattfinden muss, sollte dieses Verfahren kein Problem für die von BBM beschriebene Anwendung sein.
 \subsection{Schätzung aus Partikeln berechnen}
 \label{subsec:schaetzungBerechnen}
-Der Algorithmus soll die Position des Roboters auf der Bühne, sowie dessen Orientierung angeben können. Weil der Partikel-Filter diese Information nur in der Partikelverteilung im Zustandsraum kennt, muss daraus eine geschätzte mittlere Position berechnet werden. Um einschätzen zu können, wie verlässlich diese Positionsangabe ist, wird außerdem noch die Varianz berechnet. Für die Position wird sie als Ellipse um die Positionsangabe ausgegeben und besteht aus großer Halbachse, kleiner Halbachse und Winkel zur x-Achse des Bühnenkoordinatensystems. Die Ellipse drückt den Vertrauensbereich aus, der 3$\sigma$ einer Normalverteilung entspricht.
+Der Algorithmus soll die Position des Roboters auf der Bühne, sowie dessen Orientierung angeben können. Weil der Partikel-Filter diese Information nur in der Partikelverteilung im Zustandsraum kennt, muss daraus eine geschätzte mittlere Position berechnet werden. Um einschätzen zu können, wie verlässlich diese Positionsangabe ist, wird außerdem noch die Varianz berechnet. Für die Position, als zweidimensionale Größe, wird sie als Ellipse um die Position ausgegeben und besteht aus großer Halbachse, kleiner Halbachse und Winkel zur x-Achse des Bühnenkoordinatensystems. Die Ellipse drückt den Vertrauensbereich aus, der 3$\sigma$ einer Normalverteilung entspricht. Für den Winkel wird neben dem Mittelwert die Standardabweichung berechnet. Damit steht die Mittlere Pose des Roboters über alle Partikel samt Standardabweichung zur Verfügung.
 \section{Musterbewertung}
 \label{sec:musterbewertung}
 Bei der Musterbewertung geht es darum, zu einer bekannten Region im Bild eine Bewertung ab zu geben, wie gut sie zu einem gegebenen Muster passt. Bei der Bewertung wird zu jedem Bit des Musters geprüft, ob an dessen Position ein schwarzer oder ein weißer Wert vorliegt. Dabei soll ein Score berechnet werden der zwischen 0 und 1 liegt. Wobei 0 keinerlei und 1 volle Übereinstimmung signalisiert. Es ist gewollt, dass hier keine harte Entscheidung getroffen wird. Denn damit gehen Informationen verloren, die zur Lokalisierung beigetragen hätten. Wenn beispielsweise ein Teil des Musters verdeckt wurde, so wäre immer noch ein mittlerer Score möglich. Bei einer harten Entscheidung würde Partikel zu denen das Bild normalerweise passt genau so schlecht bewertet wie alle anderen. 
@@ -134,7 +134,7 @@ Deshalb wird ein Minimalscore von 0,01 festgelegt der in diesen Fällen gegeben w
 		\input{chapter2.3/randomRating.tex}
 	\end{minipage}
 	}
-	\caption{1,8 Millionen Posen wurden mit dem Bild Oben Bewertet. Nur 136 davon liegen über dem Minimalscore}
+	\caption{1,8 Millionen Posen wurden mit dem Bild oben Bewertet. Nur 136 davon liegen über dem Minimalscore. Sie sind hier abgebildet.}
 	\label{fig:randomRating}
 \end{figure}
 
@@ -179,8 +179,24 @@ P = e^{-\frac{\hat{p}}{2}}
 Sie führt bei sehr kleinem $\hat{p}$ zu einem Score nahe 1, während bei großem $\hat{p}$ der Score gegen 0 geht. Dieses Verhalten ist nötig um den Score mit dem Gewicht der Partikel multiplizieren zu können. Sie stellt sicher, dass der Score $P$ immer im Intervall $[0..1]$ bleibt
 \section{Parameter einstellen}
 \label{sec:parameter_loca}
-{\color{red}
-Wie wird initialisiert? 
-
-Wie wird die "geschätzte" Position berechnet?
-}
+An dieser Stelle soll beschrieben werden, mit welchen Größen das Verhalten von Filter und Bildbewertung beeinflusst werden können. Für den Filter lassen sich folgende Variablen verändern:
+\begin{description}
+\item [Anzahl der Partikel] ($N_p=2500$) Wie in Abschnitt \ref{subsec:zustandsraum} schon beschrieben werden 2500 Partikel eingesetzt. Je nach Anwendung muss ihre Anzahl angepasst werden. Sie ist dabei besonders von den Rechenkapazitäten abhängig die zur Verfügung stehen, sowie den zeitlichen Anforderungen.
+\item[Raddurchmesser] ($R=80mm$) Der Filter nutzt diesen Parameter um aus Radumdrehungen eine zurückgelegte Strecke zu berechnen. Dies ist für die Berechnungen im Dynamik-Update relevant.
+\item[Getriebeübersetzung] ($g=14,5$) Die Getriebeübersetzung wird vom Filter verwendet, um von Umdrehungen des Encoders in Radumdrehungen um zu rechnen. Dabei ist ein Verhältnis $g:1$ bzw. Encoder:Rad gemeint.
+\item[Auflösung Drehimpulsgeber] ($\gamma=2000\frac{1}{U}$)
+\item [Impulse pro Meter] ($I_m=57693.67$) Diese Größe kombiniert mehrere Maße und Parameter des Antriebs und des Encoders. Mit ihr lässt sich aus einer Anzahl von Impulsen des Encoders die gefahrene Strecke berechnen. Darin enthalten sind:
+\begin{equation}
+I_m=\frac{g\cdot \gamma}{2\pi R} =\frac{14,5\cdot 2000}{2\pi \cdot 0,08m} = 
+57693,67\ \frac{1}{m}
+\end{equation}
+\item [Abstand zwischen den Rädern] ($D_{R}=700mm$) Dieser Parameter wird verwendet, um bei Drehungen den zurück gelegten Weg der Räder berechnen zu können. Im Filter wird aus Differenzen des linken und rechten Encoders damit ein Drehwinkel bestimmt.
+\item [Unsicherheits Koeffizient Strecke] ($\sigma_s=0.2$) Diese Größe steuert wie groß das Rauschen ist welches auf die Bewegung eines Partikels wirkt. Dabei ist $\sigma_s$ eine Prozentgröße. Sie wird mit dem zu verrauschenden Wert und der Ziehung einer Gaußschen Normalverteilung multipliziert.
+\item [Unsicherheits Koeffizient Drehung] ($\sigma_\psi=0.2$) Dieser Koeffizient ist ebenfalls eine prozentuale Größe wie $\sigma_s$. Er bezieht sich jedoch nur auf Drehungen. Er wird genau so verrechnet wie der Koeffizient für eine Strecke.
+\end{description}
+PicRating:
+\begin{description}
+\item[Mindestanzahl an sichtbaren Bits] ($B_{min}=18$) Bei der Bildauswertung werden Partikel automatisch mit dem Mindestscore bewertet, wenn weniger als $B_{min}$ Positionen für Bit-Muster berechnet wurden. Dies dient vor allem dem Schutz vor fehlerhaften hohen Scores durch zufälliges Übereinstimmen weniger Pixel im Bild.
+\item[Kontrast Grenzwert] ($K_T=20$) Wenn der mittlere Kontrast über alle Pixel in den Bit-Musterpositionen kleiner wird als $K_T$, wird der Score abgewertet. Ist er größer, wird er verbessert.
+\item[Größe Pixelgrid] ($U_{Pix}=1$) An den Positionen wo ein Bit-Muster vermutet wird, können unterschiedlich viele Pixel ausgewertet werden. Mit $U_{Pixel}=0$ würde nur ein Pixel an der Position betrachtet werden. Der wert gibt an wie viele Nachbar Pixel in jede Richtung mit in die Berechnungen einbezogen werden sollen. Ein Wert von 3 würde ein 7~x~7 Raster mit 49 Pixeln bedeuten.
+\end{description}

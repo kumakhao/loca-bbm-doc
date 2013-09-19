@@ -1,0 +1,17 @@
+reset
+set terminal epslatex color size 6,5
+set output "chapter3/croudEffect/croudEffect.tex"
+set boxwidth 0.9 relative
+set style data histograms
+set style histogram cluster
+set style histogram clustered gap 3
+set style fill solid 1.0 border lt-1
+set yrange [0:0.3]
+set xlabel "Anzahl an Personen auf der B\374hne"
+set ylabel "Mittlerer Abstand zum sollwert in Metern"
+set key autotitle columnhead
+plot 'chapter3/croudEffect/oval_data' using 2:xticlabels(1),\
+'chapter3/croudEffect/serpentinen_data' using 2,\
+'chapter3/croudEffect/clockwise_data' using 2,\
+'chapter3/croudEffect/antiClockwise_data' using 2
+
