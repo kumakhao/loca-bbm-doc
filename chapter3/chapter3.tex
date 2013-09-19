@@ -1,10 +1,10 @@
 \chapter{Versuche in der Simulation}
 \label{chap:versuche}
-Die Versuche in diesem Kapitel sollen helfen das entwickelte Verfahren zu bewerten. Es wird einen Versuch geben, um das Messmodell des Partikel-Filters zu untersuchen. Außerdem wird anhand von verschiedenen Fahrkurven das Verhalten bei unterschiedlichen Bildaufnahmefrequenzen betrachtet, sowie der Einfluss von Personen auf der Bühne beurteilt.
+Die Versuche in diesem Kapitel sollen helfen das entwickelte Verfahren zu bewerten. Es wird einen Versuch geben, um das Messmodell des Partikel-Filters zu untersuchen. Danach wird anhand von verschiedenen Fahrkurven das Verhalten bei unterschiedlichen Bildaufnahmefrequenzen betrachtet, sowie der Einfluss von Personen auf der Bühne beurteilt.
 
 \section{Versuche zur Genauigkeit des Messmodells}
 \label{sec:VersucheModell}
-In einer ersten Versuchsreihe, soll die Genauigkeit des im Partikelfilter verwendeten Messmodells untersucht werden. Dafür soll zu einem gegebenen Bild möglichst der gesamte Zustandsraum mit dem in Kapitel \ref{subsec:messmodell} beschriebenen Verfahren bewertet werden. Je nach dem wie viele Punkte im Zustandsraum einen hohen Score erhalten, lässt darauf schließen wie genau die Zuordnung zwischen Bild und Pose funktioniert. Im ersten Durchlauf soll erst mal grob der gesamte Raum abgesucht werden. Er soll einen Überblick geben, wo starke Antworten liegen, die dann in weiteren Durchläufen genauer abgetastet werden können.
+In einer ersten Versuchsreihe, soll die Genauigkeit des im Partikelfilter verwendeten Messmodells untersucht werden. Dafür soll zu einem gegebenen Bild möglichst der gesamte Zustandsraum mit dem in Kapitel \ref{subsec:messmodell} beschriebenen Verfahren bewertet werden. Die Anzahl der Punkte im Zustandsraum, die einen hohen Score erhalten, lässt darauf schließen wie genau die Zuordnung zwischen Bild und Pose funktioniert. Im ersten Durchlauf soll erst mal grob der gesamte Raum abgesucht werden. Er soll einen Überblick geben, wo starke Antworten liegen, die dann in weiteren Durchläufen genauer abgetastet werden können.
 
 \begin{figure}[p]
     \centering
@@ -78,8 +78,7 @@ Die Ergebnisse sind in Abbildung \ref{fig:frequencyPlot} zu sehen. {\color{red} 
 
 \section{Versuche zum Einfluss von Menschen auf der Bühne}
 \label{sec:VersucheCroud}
-
-Hier sollen Versuche zeigen, wie stark Menschen auf der Bühne die Lokalisation mit dem hier vorgestellten Verfahren stören. Dabei geht es im wesentlichen darum, dass Menschen im Bild stehen, und so die Bit-Muster ganz oder teilweise verdecken. Dazu werden ebenfalls die in Abschnitt \ref{sec:Fahrkurven} beschriebenen Fahrkurven verwendet. Genau wie bei den Versuchen zur Bildaufnahmefrequenz wird auch hier der mittlere Abstand zur wahren Roboterposition verwendet. Die Durchführung ist die gleiche wie zuvor, nur dass als Zeit zwischen zwei Bildern 1500~$ms$ eingestellt wurde. Statt Bildaufnahmefrequenz wird nun die Anzahl der Personen auf der Bühne von 3 auf 9, 15 und 21 erhöht.
+Hier sollen Versuche zeigen, wie stark Menschen auf der Bühne die Lokalisation mit dem hier vorgestellten Verfahren stören. Dabei geht es im wesentlichen darum, dass Menschen im Bild stehen und so die Bit-Muster ganz oder teilweise verdecken. Dazu werden ebenfalls die in Abschnitt \ref{sec:Fahrkurven} beschriebenen Fahrkurven verwendet. Genau wie bei den Versuchen zur Bildaufnahmefrequenz wird auch hier der mittlere Abstand zur wahren Roboterposition verwendet. Die Durchführung ist die gleiche wie zuvor, nur dass als Zeit zwischen zwei Bildern auf 1500~$ms$ eingestellt wurde. Statt Bildaufnahmefrequenz wird nun die Anzahl der Personen auf der Bühne von 3 auf 9, 15 und 21 erhöht.
 
 \begin{wrapfigure}{o}{0.5\textwidth}
   	\center
@@ -87,7 +86,7 @@ Hier sollen Versuche zeigen, wie stark Menschen auf der Bühne die Lokalisation m
     \caption{Mögliche Positionen von Personen}
     \label{fig:maxCrowd}
 \end{wrapfigure}
-Für die Positionen der Personen auf der Bühne gibt es 23 festgelegte Stellen. Aus diesen wird bei jedem Simulationslauf zufällig die benötigte Anzahl gezogen. Auf Abbildung \ref{fig:maxCrowd} sieht man die möglichen Positionen der Personen. Wie in Abschnitt \ref{subsec:dieSzene} beschrieben sind die Personen 1800~mm hoch und 400~mm breit. Die Vermutung wäre, je mehr Personen sich auf der Bühne befinden, umso häufiger kommt es vor, das sie im Bild stehen und das Bit-Muster verdecken. Also müsste bei einer hohen Personendichte der mittlere Abstand von der wahren Position größer werden. Was an diesem Versuch nicht zu erkennen sein wird, ist wie sich die Unsicherheit der vom Filter geschätzten Position verhält.
+Für die Positionen der Personen auf der Bühne gibt es 23 festgelegte Stellen. Aus diesen wird bei jedem Simulationslauf zufällig die benötigte Anzahl gezogen. Auf Abbildung \ref{fig:maxCrowd} sieht man die möglichen Positionen der Personen. Wie in Abschnitt \ref{subsec:dieSzene} beschrieben sind die Personen 1800~mm hoch und 400~mm breit. Die Vermutung wäre, je mehr Personen sich auf der Bühne befinden, umso häufiger kommt es vor, das sie im Bild stehen und das Bit-Muster teilweise oder ganz verdecken. Also müsste bei einer hohen Personendichte der mittlere Abstand von der wahren Position größer werden. 
 \begin{figure}[h]
 	\centering
 	\input{chapter3/croudEffect/croudEffect.tex}

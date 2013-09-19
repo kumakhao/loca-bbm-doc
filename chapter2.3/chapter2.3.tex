@@ -106,6 +106,12 @@ in eine Punktmenge in Pixelkoordinaten $M_P$ projiziert werden
 M_P = K_i\cdot M_K
 \end{equation}
 
+\subsection{Initialisierung}
+\label{subsec:FilterInitialisierung}
+Beim Start der Lokalisation muss den Partikeln eine Anfangsposition zugewiesen werden. Dies ist das in Abschnitt \ref{sec:lokalisation} beschriebene Teilproblem der Globalen Lokalisation. Eine übliche Vorgehensweise um einen sinnvollen Anfangszustand zu erhalten, ist die erste Messung zu verwenden und den gesamten Zustandsraum nach korrespondierenden Zuständen zu durchsuchen. Da ein durchsuchen des gesamten Raumes sehr lange dauern würde, wurde dieser eingegrenzt und damit eine Forderung an die Anfangs Pose des Roboters gestellt. Für die anfängliche Globale Lokalisierung muss der Roboter das Bit-Muster der mittleren Lichtwand sehen können. Es wird gefordert, das er in Richtung x-Achse ausgerichtet ist mit einer Toleranz von $\mp$ 20° der Blickrichtung. An die genaue Position auf der Bühne wird keine weitere Anforderung gestellt, solange das Bit-Muster im Bild ist, und der Blickwinkel in der Toleranz ist. In einer realen Anwendung würde der Roboter etwa mittig auf die Bühne gestellt und in Richtung der mittleren Lichtwand gedreht werden. Diese Globale Lokalisation würde ein paar Minuten brauchen und danach könnte der Roboter seinen Programmierten Weg abfahren. Da die Lokalisation nur einmal zu Beginn stattfinden muss, sollte dieses Verfahren kein Problem für die von BBM beschriebene Anwendung sein.
+\subsection{Schätzung aus Partikeln berechnen}
+\label{subsec:schaetzungBerechnen}
+Der Algorithmus soll die Position des Roboters auf der Bühne, sowie dessen Orientierung angeben können. Weil der Partikel-Filter diese Information nur in der Partikelverteilung im Zustandsraum kennt, muss daraus eine geschätzte mittlere Position berechnet werden. Um einschätzen zu können, wie verlässlich diese Positionsangabe ist, wird außerdem noch die Varianz berechnet. Für die Position wird sie als Ellipse um die Positionsangabe ausgegeben und besteht aus großer Halbachse, kleiner Halbachse und Winkel zur x-Achse des Bühnenkoordinatensystems. Die Ellipse drückt den Vertrauensbereich aus, der 3$\sigma$ einer Normalverteilung entspricht.
 \section{Musterbewertung}
 \label{sec:musterbewertung}
 Bei der Musterbewertung geht es darum, zu einer bekannten Region im Bild eine Bewertung ab zu geben, wie gut sie zu einem gegebenen Muster passt. Bei der Bewertung wird zu jedem Bit des Musters geprüft, ob an dessen Position ein schwarzer oder ein weißer Wert vorliegt. Dabei soll ein Score berechnet werden der zwischen 0 und 1 liegt. Wobei 0 keinerlei und 1 volle Übereinstimmung signalisiert. Es ist gewollt, dass hier keine harte Entscheidung getroffen wird. Denn damit gehen Informationen verloren, die zur Lokalisierung beigetragen hätten. Wenn beispielsweise ein Teil des Musters verdeckt wurde, so wäre immer noch ein mittlerer Score möglich. Bei einer harten Entscheidung würde Partikel zu denen das Bild normalerweise passt genau so schlecht bewertet wie alle anderen. 
@@ -174,19 +180,7 @@ Sie führt bei sehr kleinem $\hat{p}$ zu einem Score nahe 1, während bei großem $
 \section{Parameter einstellen}
 \label{sec:parameter_loca}
 {\color{red}
-Wieviele Partikel, und warum?
-
-Wie sieht der Partikelraum aus? 
-
-Wie ist das Messmodell aufgebaut?
-
-Besonderheiten im Messmodell: erst an 10 Punken wird ausgewertet, geringer Kontrast führt zu Abwertung.
-
 Wie wird initialisiert? 
-
-Wie ist das Dynamikmodell aufgebaut?
-
-Wie ist das Muster aufgebaut?
 
 Wie wird die "geschätzte" Position berechnet?
 }
