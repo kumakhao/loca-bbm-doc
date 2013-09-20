@@ -1,9 +1,9 @@
 reset
 set key below
-set terminal epslatex color size 4.5,5
+set terminal epslatex color size 6,5
 set output "chapter3/fahrkurven/Loop_Anticlockwise_1500.tex"
-set xrange [-10:10]
-set yrange [-10:10]
+set xrange [-7:7]
+set yrange [-7:7]
 set size ratio 1.0
 set zeroaxis
 set border 0

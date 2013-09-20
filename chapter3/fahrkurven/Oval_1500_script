@@ -1,9 +1,9 @@
 reset
 set key below
-set terminal epslatex color size 4,5
+set terminal epslatex color size 6,5
 set output "chapter3/fahrkurven/Oval_1500.tex"
-set xrange [-10:10]
-set yrange [-10:10]
+set xrange [-7:7]
+set yrange [-7:7]
 set size ratio 1.0
 set zeroaxis
 set border 0
@@ -22,7 +22,7 @@ set style line 12 lc rgb 'blue' lt 2
 plot \
 'chapter3/fahrkurven/Oval_1500_data' every 50::1 using 3:4:5:6:7 t "$3\\sigma$" with ellipses lc rgb "blue",\
 'chapter3/fahrkurven/Oval_1500_data' every 50::1 using 3:4 t "" with points lc rgb "blue",\
-'chapter3/fahrkurven/Oval_1500_data' every ::1 using 1:2 t "Trajektorie des Roboters" with lines ls 11,\
+'chapter3/fahrkurven/Oval_1500_data' every ::1 using 1:2 t "Trajektorie" with lines ls 11,\
 'chapter3/fahrkurven/Oval_1500_data' every ::1 using 3:4 t "Filter Sch\344tzung" with lines ls 12,\
 'chapter3/fahrkurven/Oval_1500_data' every ::1 using 8:2 t "Update" ls 11
 

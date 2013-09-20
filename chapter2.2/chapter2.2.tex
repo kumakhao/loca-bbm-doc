@@ -38,7 +38,7 @@ Auf jedem Segment sind 8 x 8 Bits unter gebracht. Das macht eine Kantenlänge von
 
 \item[Der Roboter (4)] wird nur duch einen weißen Würfel dargestellt. Die genaue Form und das Aussehen spielen für die Lokalisation keine Rolle. Die Kameras sind so angebracht, dass der Roboter selbst nicht im Bild zu sehen ist. Der Würfel ist für den Bediener gedacht, der die Szene aus einem Blickwinkel hinter dem Roboter steuert. Abbildung \ref{fig:bildderszene} zeigt ein Bild, welches aus diesem Blickwinkel aufgenommen worden ist. Der Roboter lässt sich mit den Tasten W, A, S, D (vorwärts, links, rückwärts, rechts) grob verfahren oder mit einem Pad\footnote{PlayStation 3 Wireless Sixaxis Controller} mit Analogsticks auch präziser steuern. Die Steuerbefehle für den Roboter werden als Geschwindigkeit (gerade aus) und Drehrate interpretiert. Diese führen dann, in jedem Simulationsschritt zu einer Positionsänderung. Es wird erst eine Drehung um die Hälfte der Winkeländerung durchgeführt. Anschließend wird in die neuer Richtung geradeaus die Streckenänderung zurück gelegt. Und mit einer zweiten Drehung bis zur vollen Winkeländerung wird die Bewegung abgeschlossen. Die Position des Roboters wird relativ zum Bühnenkoordinatensystem in x- und y-Werten ausgedrückt. Im Roboterkoordinatensystem zeigt die x-Achse immer in Fahrtrichtung des Roboters, die z-Achse zeigt nach oben und mit der y-Achse ergibt sich ein Rechtssystem. Der Ursprung dieses Systems ist mittig zwischen den Rädern auf Bodenhöhe. Die Orientierung des Robotermodells wird als Winkel zwischen den x-Achsen von Roboter- und Bühnenkoordinatensystem ausgedrückt.
 
-\item[Besucher (5)] werden mit 400~x~400~x~1800~mm Quadern dargestellt. Damit sie für den Bediener besser in der Szene zu erkennen sind, wurden sie grün gefärbt. Sie bewegen sich nicht, sondern stehen an vorher festgelegten Positionen. Vor einer Simulation wird die Anzahl der Besucher eingestellt, die auf der Bühne stehen sollen. Dabei gibt es 25 mögliche Positionen aus denen dann die gewünschte Anzahl zufällig gezogen wird. Sie sollen mögliche Verdeckungen im Bildbereich des Roboters darstellen. Damit soll untersucht werden, wie gut der Algorithmus mit teilweise verdeckten Code-Bereichen zurecht kommt. 
+\item[Besucher (5)] werden mit 400\,x\,400\,x\,1800\,$mm$ Quadern dargestellt. Damit sie für den Bediener besser in der Szene zu erkennen sind, wurden sie grün gefärbt. Sie bewegen sich nicht, sondern stehen an vorher festgelegten Positionen. Vor einer Simulation wird die Anzahl der Besucher eingestellt, die auf der Bühne stehen sollen. Dabei gibt es 25 mögliche Positionen aus denen dann die gewünschte Anzahl zufällig gezogen wird. Sie sollen mögliche Verdeckungen im Bildbereich des Roboters darstellen. Damit soll untersucht werden, wie gut der Algorithmus mit teilweise verdeckten Code-Bereichen zurecht kommt. 
 
 \item[Partikel (6)] werden zur Veranschaulichung und zu debugging Zwecken visualisiert. Sie werden durch rote kleine spitze Dreiecke dargestellt. Der spitze Winkel zeigt dabei die Orientierung an. Sie befinden sich nur auf dem Boden und beeinträchtigen die Bildverarbeitung deshalb nicht.
 \end{description}
@@ -69,15 +69,28 @@ mit Getriebeübersetzung: $ g $ und Encoder-Auflösung(pro Umdrehung): $ \gamma $
 \label{subsec:encoderFehlerInSim}
 Es können drei verschiedene Typen von Messabweichungen simuliert werden:
 
-Eine \textbf{systematische Abweichung} bei der Umrechnung vom Radwinkel in Encoderimpulse. Dies führt zu einem sich akkumulierenden Fehler in der Gefahrenen Strecke und der Orientierung. In der Simulation wurde diese Art Unsicherheit durch einen veränderten Radradius erzeugt. Für beide Räder wird vor jedem Simulationslauf in einem Fehlerintervall der Radius leicht verändert. Je stärker die Radien sich unterscheiden, umso stärker scheint der Roboter bei geradeaus Fahrt zu einer Seite zu driften. Diese Art Messabweichung ist also über die Dauer eine Simulation konstant, aber für jeden Simulationslauf zufällig.
+Eine \textbf{systematische Abweichung} durch einen ungenau bekannten Radradius. Dies führt zu einem sich akkumulierenden Fehler in der Gefahrenen Strecke und der Orientierung. In der Simulation wurde diese Art Unsicherheit durch einen veränderten Radradius $R_{r/l}$ erzeugt. Für beide Räder wird vor jedem Simulationslauf in einem Fehlerintervall der Radius leicht verändert.
+\begin{equation}
+R_{r/l}=R_{Maß}+R_{Maß}\cdot \sigma_{R} \cdot RandomGaussian()
+\end{equation}
+Mit $\sigma_{R}$ lässt sich einstellen, wie stark die Abweichung ist. Je stärker die Radien sich unterscheiden, umso stärker scheint der Roboter bei geradeaus Fahrt zu einer Seite zu driften. Diese Art Messabweichung ist über die Dauer eine Simulation konstant, aber für jeden Simulationslauf zufällig.
 
-Eine \textbf{systematische Abweichung} die nur bei Drehungen auftritt. Dies ist typischerweise die dominante Fehlerquelle bei radgetriebenen Robotern. Bei einer Drehung ist der Auflagepunkt der Räder nicht bekannt, da der innen liegende Teil des Rades sich langsamer drehen müsste als der äußere. Dies führt bei einer Drehung dazu, dass der Abstand des Rades zur Drehachse nicht genau bekannt ist. In der Simulation wird daher dieser Abstand über die Breite der Räder zufällig bestimmt. Realistischer weise müsste dieser Abstand für jede Drehung neu bestimmt werden. Zum testen der Lokalisation reicht es aber aus, wenn dies nur einmal zu beginn einer Simulation geschieht. Dadurch treten bei Drehungen Messabweichungen auf, die zwar über einen Simulationslauf konstant und damit systematisch sind, aber die Lokalisierung genau so erschweren wie zufällige Abstände während der Laufzeit.
+Eine \textbf{systematische Abweichung} die nur bei Drehungen auftritt. Dies ist typischerweise die dominante Fehlerquelle bei radgetriebenen Robotern. Bei einer Drehung ist der Auflagepunkt der Räder nicht bekannt, da der innen liegende Teil des Rades sich langsamer drehen müsste als der äußere. Dies führt bei einer Drehung dazu, dass der Abstand des Rades zur Drehachse nicht genau bekannt ist. In der Simulation wird daher dieser Abstand $D_{r/l}$ über die Breite $W_{r/l}$ der Räder zufällig bestimmt.
+\begin{equation}
+D_{r/l}=\frac{K}{2}+W_{r/l}\cdot 0,5\cdot RandomGaussian()
+\end{equation}
+mit Spurbreite $K$ von Radmitte zu Radmitte.
 
-Eine \textbf{zufällige Abweichung} bei den Encoder-Messwerten soll ein mögliches Spiel in Kupplung oder Getriebe simulieren. Dabei wird zu dem akkumulierten Encoder-Wert eines Rades ein Gaußsches Rauschen addiert, welches proportional zur letzten Winkeländerung ist. Ist diese bei Stillstand gleich Null, so wird nur ein schwaches Grundrauschen addiert.
+Realistischer weise müsste dieser Abstand für jede Drehung neu bestimmt werden. Zum testen der Lokalisation reicht es aber aus, wenn dies nur einmal zu beginn einer Simulation geschieht. Dadurch treten bei Drehungen Messabweichungen auf, die zwar über einen Simulationslauf konstant und damit systematisch sind, aber die Lokalisierung genau so erschweren wie zufällige Abstände während der Laufzeit.
 
+Eine \textbf{zufällige Abweichung} bei den Encoder-Messwerten soll ein mögliches Spiel in Kupplung oder Getriebe simulieren. Dabei wird zu dem akkumulierten Encoder-Wert eines Rades ein Gaußsches Rauschen $err$ addiert, welches proportional zur letzten Winkeländerung $\Delta\psi$ ist. Ist diese bei Stillstand gleich Null, so wird nur ein schwaches Grundrauschen addiert.
+\begin{equation}
+err=\left(\Delta\psi + RobotMaxSpeed\cdot 0.01\right)\cdot psi2I \cdot \sigma_I \cdot RandomGaussian()
+\end{equation}
+mit einem Umrechnungsfaktor $psi2I$ der hier zur Abkürzung verwendet wird. Das $\sigma_I$ ist ein Koeffizient, mit dem sich die Stärke des Rauschens einstellen lässt und $(RobotMaxSpeed\,\cdot\,0.01)$ ist für eine Grundrauschen zuständig, das proportional zur eingestellten Roboter-Maximalgeschwindigkeit ist. 
 \subsection{Bilder der Kamera}
 \label{subsec:bilderderkamera}
-Die Kamera des Roboters wird in der Simulation nicht als Modell angezeigt. Sondern lediglich durch ein Objekt der Klasse osgViewer::View implementiert. Um einer echten Kamera möglichst nah zu kommen, wurde die Auflösung sowie der Öffnungswinkel der am Roboter verbauten Kamera in der Simulation nach empfunden. Die Auflösung der Bilder ist mit 1280~x~720 Pixeln im 16:9 Format. Der Horizontale Öffnungswinkel beträgt 74~Grad. Die verwendete OSG Bibliothek setzt auf OpenGL auf und nutzt deshalb auch die dort verwendeten Funktionen zur Perspektivischen Projektion. In Abbildung \ref{fig:OpenGLfrustum} ist zu sehen, wie diese in OpenGL beschrieben wird. Ein Pyramiden Stumpf begrenzt dabei ein Volumen, in dem alle sichtbaren Objekte liegen. Alles, dass sich außerhalb dieses Bereiches befindet ist im Bild nicht zu sehen. Dieser Pyramiden Stumpf wird auch \textbf{frustum} genannt, und seine Eigenschaften werden üblicher Weise in einer Projektionsmatrix zusammen gefasst. Diese lässt sich direkt setzten, oder über eine Hilfsfunktion durch folgende vier Parameter definieren:
+Die Kamera des Roboters wird in der Simulation nicht als Modell angezeigt. Sondern lediglich durch ein Objekt der Klasse osgViewer::View implementiert. Um einer echten Kamera möglichst nah zu kommen, wurde die Auflösung sowie der Öffnungswinkel der am Roboter verbauten Kamera in der Simulation nach empfunden. Die Auflösung der Bilder ist mit 1280\,x\,720 Pixeln im 16:9 Format. Der Horizontale Öffnungswinkel beträgt 74\,Grad. Die verwendete OSG Bibliothek setzt auf OpenGL auf und nutzt deshalb auch die dort verwendeten Funktionen zur Perspektivischen Projektion. In Abbildung \ref{fig:OpenGLfrustum} ist zu sehen, wie diese in OpenGL beschrieben wird. Ein Pyramiden Stumpf begrenzt dabei ein Volumen, in dem alle sichtbaren Objekte liegen. Alles, dass sich außerhalb dieses Bereiches befindet ist im Bild nicht zu sehen. Dieser Pyramiden Stumpf wird auch \textbf{frustum} genannt, und seine Eigenschaften werden üblicher Weise in einer Projektionsmatrix zusammen gefasst. Diese lässt sich direkt setzten, oder über eine Hilfsfunktion durch folgende vier Parameter definieren:
 \begin{description}
 \item[fovy] Gibt den vertikalen Öffnungswinkel in Grad an.
 \item[aspect] Gibt das Verhältnis zwischen horizontalem und vertikalem Öffnungswinkel an. Er sollte gleich dem Seitenverhältnis der Bildauflösung gewählt werden, um keine Verzerrungen zu bekommen. (Breite/Höhe)
@@ -93,3 +106,32 @@ Die Kamera des Roboters wird in der Simulation nicht als Modell angezeigt. Sonde
 OpenGL projiziert zunächst auf eine normalisierte Bildebene. Aus dieser normalisierten Darstellung muss mittels einer Viewporttransformation in die Bildschirmkoordinaten (Pixel) umgerechnet werden. Der Viewport ist dabei der Bildschirmbereich, auf den das fertig gerenderte Bild angezeigt wird. Mit OSG lässt sich der Viewport für eine Kamera einfach mit der gewünschten Auflösung (Höhe, Breite) und einem Ursprung setzten. Die Matrix für die Viewporttransformation heißt in OSG windowMatrix, und wird automatisch aus dem gesetzten Viewport berechnet.
 
 Die Bilder der Roboter Kamera werden aber nicht auf dem Bildschirm angezeigt, sondern in einen Buffer geschrieben und von dort in ein für OpenCV nutzbares Format kopiert. In dieser Form werden die Bilder auf der Festplatte gespeichert und an die Lokalisation als Messupdate gegeben.
+
+\section{Einstellungen}
+\label{sec:einstellungenSim}
+In der Simulationssoftware lassen sich bestimmte Parameter verändern, um ihr Verhalten zu definieren. Hier soll kurz zusammen gefasst werden welche Parameter es gibt, und was sie beeinflussen. In Klammern steht der voreingestellte Default-Wert.
+\begin{description}
+\item[picture path](<path>) Die Bilder die während eines Simulationslaufes von der Kamera gemacht werden, werden an diese Stelle gespeichert. Sie sind aufsteigend nummeriert, beginnend mit "0000.jpg"
+\item[datafile name]("locaDatafile.txt")Der name der Datei in der die Rohdaten eines Simulationslaufes gespeichert werden. Sie enthält Encoder-Werte, echte Roboterpose, geschätzte Roboterpose, Varianz Roboterpose und den Pfad zum Bild das zu den Messwerten gehört. Die Werte werden in jedem Simulationsschritt geschrieben.
+\item[takepicture intervall](3000) Zeit in Millisekunden zwischen zwei Kamerabildern. Dabei wird \textbf{loop~target~time} verwendet um zu bestimmen wie viele Simulationsschritte der Zeitangabe entsprechen.
+\item[loop target time](33333) Zeit in Mikrosekunden die einem Simulationsschritt entspricht. Der default wert entspricht 30 Schritte pro Sekunde.
+\item[crowd size](0)	Stellt ein wie viele Personen auf der Bühne sein sollen. Mögliche sind 0 bis 23 Personen.
+\item[particle visibility ratio](1) Dies stellt ein wie viele Partikel visualisiert werden. Es beeinflusst die Simulation nicht und dient nur dem Bediener um das Partikelverhalten sehen zu können. Der Wert ist als Teiler zu verstehen, 1 bedeutet alle Partikel werden visualisiert während 10 nur ein Zehntel darstellt. 
+\item[sys error on](true) Mit diesem Flag kann der Systematische Fehler ein- oder ausgeschaltet werden.
+\item[camera picture width](1280) Gibt die Bildauflösung der Simulierten Kamera an.
+\item[camera picture height](720) Gibt die Bildauflösung der Simulierten Kamera an.
+\item[field of view horizontal](74) Dies stellt den horizontalen Öffnungswinkel der Kamera ein.
+\item[blind mode on](false) Dieses Flag deaktiviert zwei Fenster  der Simulation mit denen ein Bediener die Vorgänge beobachten kann. Dies ist sinnvoll, wenn automatisiert viele Simulationsdurchläufe durchgeführt werden sollen.
+\item[robParameter.kDistanceLeftWheel](0.35) Abstand linkes Rad zum Robotermitte
+\item[robParameter.kDistanceRightWheel](0.35) Abstand rechtes Rad zum Robotermitte
+\item[robParameter.kLeftWheelWidth](0.03) Dicke linkes Rad
+\item[robParameter.kRightWheelWidth](0.03) Dicke rechtes Rad
+\item[robParameter.kRadiusWheelRight](0.08) Rechter Radradius 
+\item[robParameter.kRadiusWheelLeft](0.08) Linker Radradius
+\item[robParameter.kImpulePerTurn](2000) Encoder-Auflösung pro Umdrehung
+\item[robParameter.kTransmissionKoefficent](14.5) Faktor zwischen Raddrehung und Motorwelle
+\item[robParameter.kPsiSpeed](0.05) Winkeländerung bei Drehung pro Schritt
+\item[robParameter.kSigmaIncrement](0.05) Koeffizient für gaußsches Rauschen der Encoder-Werte
+\item[robParameter.kSigmaRadius](0.003) Koeffizient für systematischen Radiusabweichung.
+\item[robParameter.kSpeed](0.05) Strecke die pro Simulationsschritt zurückgelegt wird.
+\end{description}
