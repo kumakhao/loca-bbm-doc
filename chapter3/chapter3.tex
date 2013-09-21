@@ -83,17 +83,15 @@ Eine schräge Ellipse die um den Mittelpunkt liegt. Dabei fährt der Roboter etwa 
 
 \section{Versuche zur Bildaufnahmefrequenz}
 \label{sec:versucheFrequenz}
-Es soll untersucht werden in welchen Intervallen Bilder benötigt werden, wie stark der Einfluss der Fahrkurve darauf ist, und welche Faktoren die Bildaufnahmefrequenz beeinflussen können. Dazu werden die vier beschriebenen Fahrkurven eingesetzt. Sie werden in einem Simulationslauf dreimal abgefahren. Bei diesem Vorgang wird der Abstand zwischen der wahren und der vom Filter geschätzten Position des Roboters errechnet und über die Simulationsdauer ein Mittelwert $\hat{d}$ bestimmt.
+Es soll untersucht werden in welchen Intervallen Bilder benötigt werden, wie stark der Einfluss der Fahrkurve darauf ist, und welche Faktoren die benötigte Bildaufnahmefrequenz beeinflussen können. Dazu werden die vier beschriebenen Fahrkurven eingesetzt. Sie werden in einem Simulationslauf dreimal abgefahren. Bei diesem Vorgang wird der Abstand zwischen der wahren und der vom Filter geschätzten Position des Roboters errechnet und über die Simulationsdauer ein Mittelwert $\hat{d}$ bestimmt.
 \begin{equation}
 \hat{d}=\frac{1}{n}\sum\limits_{i=0}^n \sqrt{(x_i-xtrue_i)^2+(y_i-ytrue_i)^2}
 \end{equation}
-Um zusätzlich noch ein Maß für die Genauigkeit der geschätzten Position zu haben, wird der Mittelwert $\hat{a}$ der großen Achse $a_i$ der Unsicherheits-Ellipsen gebildet:
-\begin{equation}
-\hat{a}=\frac{1}{n}\sum\limits_{i=0}^n a_i
-\end{equation} 
-\vspace{10pt}
 
 Jeder Simulationsdurchlauf arbeitet mit zufälligen systematischen Messabweichungen. Aus diesem Grund werden 15 Simulationsdurchläufe bei gleichen Einstellungen durchgeführt und über deren Ergebnisse gemittelt. Es wurden vier verschiedene Perioden für die Zeit zwischen zwei Bildern festgelegt: 500, 1000, 2000 und 4000\,$ms$. Für jeden dieser Schritte wurde jede Fahrkurve damit 15 mal simuliert. 
+
+\subsection*{Ergebnisbeschreibung Bildaufnahmefrequenz}
+Die Ergebnisse sind in Abbildung \ref{fig:frequencyPlot} zu sehen. Für alle vier Fahrkurven lässt sich beobachten, dass sich bei sinkender Bildaufnahmefrequenz ein Anstieg des mittleren Abstandes zur tatsächlich gefahrenen Trajektorie ergibt. Für die Fahrkurven \textbf{Ellipse} und \textbf{Loop~Anticlockwise} ist der Anstieg zwischen 500 und 2000\,$ms$ in etwa linear und macht ab 4000\,$ms$ einen Sprung. Für die \textbf{Schlangenlinien} ist ein Sprung schon zwischen 1000 und 2000\,$ms$ zu sehen, mit einem weiteren zwischen 2000 und 4000\,$ms$. Bei \textbf{Loop~Clockwise} hingegen ist kein signifikanter Sprung zu erkennen. In Tabelle \ref{tab:laufzeit} werden Beispielhaft die Simulationslaufzeiten für die vier verwendeten Bildaufnahme-Perioden gezeigt. Dabei handelt es sich um nur einen Durchlauf.
 
 \begin{figure}[h]
 	\centering
@@ -102,32 +100,27 @@ Jeder Simulationsdurchlauf arbeitet mit zufälligen systematischen Messabweichung
 	\label{fig:frequencyPlot}
 \end{figure}
 
-Die Ergebnisse sind in Abbildung \ref{fig:frequencyPlot} und \ref{fig:frequencyPlot_var} zu sehen. Für alle vier Fahrkurven lässt sich beobachten, dass sich bei sinkender Bildaufnahmefrequenz ein Anstieg des mittleren Abstandes zur tatsächlich gefahrenen Trajektorie ergibt. Für die Fahrkurven \textbf{Ellipse} und \textbf{Loop~Anticlockwise} ist der Anstieg zwischen 500 und 2000\,$ms$ in etwa linear und macht ab 4000\,$ms$ einen Sprung. Für die \textbf{Schlangenlinien} ist ein Sprung schon zwischen 1000 und 2000\,$ms$ zu sehen, mit einem weiteren zwischen 2000 und 4000\,$ms$. Bei \textbf{Loop~Clockwise} hingegen ist kein signifikanter Sprung zu erkennen.
-
-Der mittlere lange Durchmesser der Ellipse wächst bei sinkender Bildaufnahmefrequenz für alle Fahrkurven. Hier ist jedoch kein so signifikanter Sprung zu beobachten wie beim Abstand. Es lässt sich nur ein unterschiedlich starker Anstieg im Durchmesser für die Fahrkurven ausmachen.
-\begin{description}
-\item[Loop~Clockwise] zeigt den geringsten Anstieg und hat von allen Fahrkurven, bei den untersuchten Bildaufnahmefrequenzen, den kleinsten mittleren Durchmesser der Unsicherheits-Ellipse.
-\item[Loop~Anticlockwise] hat in allen vier untersuchten Bereichen den zweit kleinsten Durchmesser. Sein Anstieg liegt nur knapp über dem von \textbf{Loop~Clockwise}.
-\end{description}
-
-\begin{figure}[h]
-	\centering
-	\input{chapter3/picFrequency/frequencyPlot_var.tex}
-	\caption{Gemittelter langer Durchmesser der Unsicherheits-Ellipse über verschiedene Bildaufnahmefrequenzen mit vier verschiedenen Fahrkurven.}
-	\label{fig:frequencyPlot_var}
-\end{figure}
-
-\begin{description}
-\item[Ellipse] Diese Fahrkurve liefert bei 500 und 1000\,$ms$ den größten Durchmesser. Der Anstieg ist dabei nicht so stark wie bei den  \textbf{Schlangenlinien}.
-\item[Schlangenlinien] Sie zeigen die größte Zunahme beim Durchmesser. Während sie zwischen 500 und 1000\,$ms$ an zweiter Stelle liegen, liefern sie zwischen 2000 und 4000\,$ms$ den größten Durchmesser.
-\end{description} 
-
-
-
+\subsection*{Ergebnisauswertung Bildaufnahmefrequenz}
 Werden dem Filter nur wenige Bilder pro Minute zur Verfügung gestellt, steigt der mittlere Abstand zur gefahrenen Trajektorie. Der geringe Anstieg zwischen 500 und 1000\,$ms$ lässt sich mit der Tatsache erklären, dass in dem längeren Zeitintervall die Partikel länger auf das Dynamikmodell und dessen Unsicherheiten angewiesen sind. Die Fahrkurve der \textbf{Ellipse} beinhaltet fast keine geraden Abschnitte, sondern beschreibt nahezu eine kontinuierliche Linkskurve. Da die größte Unsicherheit während Drehungen oder Kurvenfahrten entsteht, wie in Abschnitt~\ref{subsec:encoderFehlerInSim}~\textit{\nameref{subsec:encoderFehlerInSim}}  beschrieben, ist dies vermutlich der Grund warum sie bei 500 und 1000\,$ms$ die größte mittlere Abweichung aufweist. Die Fahrkurve in \textbf{Schlangenlinien} hat im Vergleich dazu viele sehr enge Kurven, die zu einer starken Orientierungsänderung führen. Dies müsste größere Unsicherheiten verursachen, als bei der großen kontinuierlichen Kurve der \textbf{Ellipse}. Es befinden sich allerdings zwischen den scharfen Kurven der \textbf{Schlangenlinien} immer Abschnitte einer Geradeausfahrt. Diese geraden Abschnitte können die Unsicherheit in den Kurven kompensieren, wenn entlang dieser ein Mess-Update stattfindet. Damit lässt sich begründen, warum die \textbf{Schlangenlinien} bei 500 und 1000\,$ms$ unter den Werten der \textbf{Ellipse} liegen. Die beiden \textbf{Loop} Fahrkurven haben nur vier Kurven welche mit 90° zwar starke Orientierungsänderungen haben, aber denen langen Geradeausfahrten folgen. Zudem fährt der Roboter auf 3 von 4 dieser geraden Abschnitte direkt auf eine der Lichtwände zu (Bei den \textbf{Schlangenlinien} ist es nur etwa jede zweite). Die Wahrscheinlichkeit ein verwertbares Bild aufzunehmen ist damit größer als bei den ersten beiden Fahrkurven.
 
-Der Sprung zwischen 1000 und 2000\,$ms$ (\textbf{Schlangenlinien}) bzw. 2000 und 4000\,$ms$ (\textbf{Ellipse}, \textbf{Loop~Anitclockwise}) lässt sich damit erklären, dass kein oder zu wenige Mess-Updates auf den geraden Abschnitten durchgeführt werden um die Unsicherheit, welche sich in den Kurven aufbaut, zu kompensieren. Warum \textbf{Loop~Clockwise} keinen solchen Sprung aufweist, während sich bei \textbf{Loop~Anticlockwise} der Wert für den mittleren Abstand zwischen 2000 und 4000\,$ms$ fast verdreifacht lässt sich mit der Fahrtrichtung gegen den Uhrzeigersinn begründen. Diese führt dazu, dass der Roboter stets auf die Lücken zwischen den Lichtwänden zu fährt. Wie im Absatz \textit{\nameref{para:LoopAnti}} oben beschrieben hat dies ungünstigen Blickwinkeln für die Kamera zu folge.
+Der Sprung zwischen 1000 und 2000\,$ms$ (\textbf{Schlangenlinien}) bzw. 2000 und 4000\,$ms$ (\textbf{Ellipse}, \textbf{Loop~Anitclockwise}) lässt sich damit erklären, dass kein oder zu wenige Mess-Updates auf den geraden Abschnitten durchgeführt werden um die Unsicherheit, welche sich in den Kurven aufbaut, zu kompensieren. Warum \textbf{Loop~Clockwise} keinen solchen Sprung aufweist, während sich bei \textbf{Loop~Anticlockwise} der Wert für den mittleren Abstand zwischen 2000 und 4000\,$ms$ fast verdreifacht lässt sich mit der Fahrtrichtung gegen den Uhrzeigersinn begründen. Diese führt dazu, dass der Roboter stets auf die Lücken zwischen den Lichtwänden zu fährt. Wie im Absatz \textit{\nameref{para:LoopAnti}} oben beschrieben hat dies ungünstige Blickwinkel für die Kamera zu folge.
 
+\subsection*{Erkenntnisse zur Bildaufnahmefrequenz}
+Die Bildaufnahmefrequenz ist ein wichtiger Parameter für das vorgestellte Lokalisationsverfahren. Wird sie zu klein eingestellt, so fehlen dem Filter die nötigen Informationen um die geschätzte Pose zu korrigieren. Wird sie hoch eingestellt, führt dies zu viele Mess-Updates, die von dem Filter verarbeitet werden müssen. Dies führt zu größeren Anforderungen an die Hardware auf der dieses Verfahren eingesetzt werden könnte. In Tabelle \ref{tab:laufzeit} wurde zur Veranschaulichung die Laufzeit nur eines Durchlaufs zu den betrachteten Perioden dargestellt. Die absolute Größe hat hier keine Aussagekraft, doch der Vergleich zwischen zwei Laufzeiten liefert einen Eindruck davon wie stark sich die Bildaufnahmefrequenz auf den Gesamtrechenaufwand auswirkt.
+
+Um einen geeigneten Wert angeben zu können ist auch zu beachten, wie die Trajektorie des Roboters auf der Bühne verläuft. Sie hat einen entscheidenden Einfluss auf die Qualität der Lokalisation. Die verwendeten Fahrkurven zeigen, wie unterschiedlich sie auf verschiedene Bildaufnahmefrequenzen reagieren.
+\begin{table}[h]
+	\center
+	\caption{Laufzeit eines Simulationsdurchlaufs bei den verwendeten Perioden}
+	\begin{tabular}{|p{25mm}|p{10mm}|p{10mm}|p{10mm}|p{10mm}|}
+		\hline 
+ 		Periode($ms$) & 500 & 1000 & 2000 & 4000 \\ 
+		\hline 
+		Laufzeit($sec$) & 54,8 & 36,5 & 27,2 & 23,0 \\ 
+		\hline 
+	\end{tabular}
+	\label{tab:laufzeit}
+\end{table}
 
 \section{Versuche zum Einfluss von Menschen auf der Bühne}
 \label{sec:VersucheCroud}

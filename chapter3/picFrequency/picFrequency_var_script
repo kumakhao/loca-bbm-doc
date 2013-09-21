@@ -12,7 +12,7 @@ set style line 2 lt rgbcolor "#5F9EA0"
 set style line 3 lt rgbcolor '#6495ED'
 set style line 4 lt rgbcolor '#DC143C'
 set xrange [-0.5:5]
-set yrange [0:5]
+set yrange [0:4]
 set xlabel "Zeit zwischen zwei Bildern in Millisekunden"
 set ylabel "Mittlerer langer Durchmesser der Ellipse in Metern"
 set key left top
