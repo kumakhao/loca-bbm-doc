@@ -2,25 +2,10 @@
 \label{chap:versuche}
 Die Versuche in diesem Kapitel sollen helfen das entwickelte Verfahren zu bewerten. Zunächst wird eine Versuch beschrieben, in dem das Messmodell des Partikel-Filters untersucht wurde. Danach wird anhand von verschiedenen Fahrkurven das Verhalten bei unterschiedlichen Bildaufnahmefrequenzen betrachtet, sowie der Einfluss von Personen auf der Bühne beurteilt.
 
-Wenn nicht anders angegeben, werden folgende Einstellungen für Simulation und Lokalisation verwendet:
-
-\begin{tabular}{cc}
-	\begin{minipage}{0.45\textwidth}
-		\begin{description}
-		\item[test1] hallo
-		\item[test3] moin
-		\end{description}
-	\end{minipage} & 
-	\begin{minipage}{0.45\textwidth}
-		\begin{description}
-		\item[test2] hallo2
-		\item[test4] moin4
-		\end{description}
-	\end{minipage}
-\end{tabular} 
+Wenn nicht anders angegeben werden die Einstellungen aus Abschnitt \ref{sec:einstellungenSim} und \ref{sec:parameter_loca} verwendet.
 \section{Versuche zur Genauigkeit des Messmodells}
 \label{sec:VersucheModell}
-In einer ersten Versuchsreihe, soll die Genauigkeit des im Partikelfilter verwendeten Messmodells untersucht werden. Dafür soll zu einem gegebenen Bild möglichst der gesamte Zustandsraum mit dem in Kapitel \ref{subsec:messmodell} beschriebenen Verfahren bewertet werden. Die Anzahl der Punkte im Zustandsraum, die einen hohen Score erhalten, lässt darauf schließen wie genau die Zuordnung zwischen Bild und Pose funktioniert. Im ersten Durchlauf soll zunächst grob der gesamte Raum abgesucht werden. Er soll einen Überblick geben, wo Antworten liegen, die dann in weiteren Durchläufen genauer abgetastet werden können.
+In einer ersten Versuchsreihe, soll die Genauigkeit des im Partikelfilter verwendeten Messmodells untersucht werden. Dafür soll zu einem gegebenen Bild möglichst der gesamte Zustandsraum mit dem in Kapitel \ref{subsec:messmodell} beschriebenen Verfahren bewertet werden. Die Anzahl der Punkte im Zustandsraum, die einen hohen Score erhalten, lässt darauf schließen wie genau die Zuordnung zwischen Bild und Pose funktioniert. Im ersten Durchlauf soll zunächst grob der gesamte Raum abgesucht werden. Diese Ergebnisse liefern einen Überblick über besonders ausgeprägte Antworten, welche im weiteren Verlauf genauer abgetastet werden.
 
 \begin{figure}[p]
     \centering
@@ -32,9 +17,9 @@ In einer ersten Versuchsreihe, soll die Genauigkeit des im Partikelfilter verwen
     \label{fig:messmodellPos}
 \end{figure}
 
-Für die Versuchsreihe wird der Zustandsraum zunächst grob in 5\,$cm$ Rasterschritten durchsucht. Dabei wird die Orientierung in 0,05 Rad (2,86°) Schritte aufgeteilt. In drei Schleifen wird so der Zustandsraum durchlaufen. Als Messung wurde ein am Ursprung (x = 0, y = 0, psi = 0) aufgenommenes Bild verwendet. Für die Darstellung in Abbildung \ref{fig:messmodellPos} oben, wurden Höhenlinien der Messantwort eingezeichnet. Dabei wurde jeweils nur die stärkste Antwort an einer Position über alle Winkel gewählt. Bei einem Zweiten Durchlauf wurde die Positionsrasterung auf 1\,cm Schritte und die Winkelschritte auf 0,005 Rad (0.28°) verkleinert. Zu sehen ist dies auf Abbildung \ref{fig:messmodellPos} unten. Um den Einfluss des Winkels darzustellen wurde in Abbildung \ref{fig:messmodellAngle} die Antwort entlang einer Linie mit $x=0.0$ geplottet. 
+Für die Versuchsreihe wird der Zustandsraum zunächst grob in 5\,$cm$ Rasterschritten durchsucht. Dabei wird die Orientierung in 0,05 Rad (2,86°) Schritte aufgeteilt. In drei Schleifen wird so der Zustandsraum durchlaufen. Als Messung wurde ein am Ursprung (x = 0, y = 0, psi = 0) aufgenommenes Bild verwendet. Für die Darstellung in Abbildung \ref{fig:messmodellPos} oben, wurden Höhenlinien der Messantwort eingezeichnet. Dabei wurde jeweils nur die stärkste Antwort an einer Position über alle Winkel gewählt. In einem zweiten Durchlauf wurde die Positionsrasterung auf 1\,cm Schritte und die Winkelschritte auf 0,005 Rad (0.28°) verkleinert. Zu sehen ist dies auf Abbildung \ref{fig:messmodellPos} unten. Um den Einfluss des Winkels darzustellen wurde in Abbildung \ref{fig:messmodellAngle} die Antwort entlang einer Linie mit $x=0.0$ geplottet. 
 
-In Abbildung \ref{fig:messmodellPos} oben ist der Zustandsraum der Position dargestellt. Die Orientierung konnte in dieser Abbildung nicht gezeigt werden. Die Lichtwände wurden als schwarze Balken kenntlich gemacht. Der rote Kreis zeigt die Pose des Roboters als das Bild aufgenommen wurde. Eine Antwort des Messmodells ist nur um die diese Position zu sehen, in dem Rest des Zustandsraumes (Bühne) gab es keine signifikante Antwort. Auf dem Bild darunter sieht man einen Vergrößerten Ausschnitt um die Roboterposition. Hier fällt auf, dass die Häufung leicht schräg liegt. Der Grund dafür ist vermutlich, dass die Lichtwand auf der das Muster abgebildet ist, nicht zentral vor dem Roboter steht, sondern in Y-Richtung verschoben ist. Die Häufung der Antworten streut vor allem entlang der Y-Achse, dies entspricht einer seitlichen Verschiebung des Roboters entlang dieser Achse bei gleichzeitiger Drehung. Dabei sind innerhalb von $\pm 30$\,$cm$ immer noch Scores größer als 0,8 möglich. Entlang der X-Achse ist eine Streuung zwischen $+15$ und $-10$\,cm zu erkennen. Durch die Höhenlinien ist zu erkennen, dass entlang der x-Achse der Score eine große Steigung hat. Dies führt zu einer relativ scharfen Kante in dieser Richtung. Auf der y-Achse dagegen, ist die Steigung schwächer, dadurch bildet sich keine scharfe Kante. 
+In Abbildung \ref{fig:messmodellPos} oben ist der Zustandsraum der Position dargestellt. Die Orientierung konnte in dieser Abbildung nicht gezeigt werden. Die Lichtwände wurden als schwarze Balken kenntlich gemacht. Der rote Kreis zeigt die Pose des Roboters als das Bild aufgenommen wurde. Eine Antwort des Messmodells ist nur um die diese Position zu sehen, in dem Rest des Zustandsraumes (Bühne) gab es keine signifikante Antwort. Auf dem Bild darunter sieht man einen vergrößerten Ausschnitt um die Roboterposition. Hier fällt auf, dass die Häufung leicht schräg liegt. Der Grund dafür ist vermutlich, dass die Lichtwand auf der das Muster abgebildet ist, nicht zentral vor dem Roboter steht, sondern in Y-Richtung verschoben ist. Die Häufung der Antworten streut vor allem entlang der Y-Achse, dies entspricht einer seitlichen Verschiebung des Roboters entlang dieser Achse bei gleichzeitiger Drehung. Dabei sind innerhalb von $\pm 30$\,$cm$ immer noch Scores größer als 0,8 möglich. Entlang der X-Achse ist eine Streuung zwischen $+15$ und $-10$\,cm zu erkennen. Durch die Höhenlinien ist zu erkennen, dass entlang der x-Achse der Score eine große Steigung hat. Dies führt zu einer relativ scharfen Kante in dieser Richtung. Auf der y-Achse dagegen, ist die Steigung schwächer, dadurch bildet sich keine scharfe Kante. 
 Aus Abbildung \ref{fig:messmodellAngle} lässt sich entnehmen, dass bei einer Verschiebung entlang der Y-Achse eine Drehung des Roboters nötig ist, um eine Pose zu erhalten die einen guten Score erhält.
 \begin{figure}[h]
     \centering
@@ -108,7 +93,7 @@ Der Sprung zwischen 1000 und 2000\,$ms$ (\textbf{Schlangenlinien}) bzw. 2000 und
 \subsection*{Erkenntnisse zur Bildaufnahmefrequenz}
 Die Bildaufnahmefrequenz ist ein wichtiger Parameter für das vorgestellte Lokalisationsverfahren. Wird sie zu klein eingestellt, so fehlen dem Filter die nötigen Informationen um die geschätzte Pose zu korrigieren. Wird sie hoch eingestellt, führt dies zu viele Mess-Updates, die von dem Filter verarbeitet werden müssen. Dies führt zu größeren Anforderungen an die Hardware auf der dieses Verfahren eingesetzt werden könnte. In Tabelle \ref{tab:laufzeit} wurde zur Veranschaulichung die Laufzeit nur eines Durchlaufs zu den betrachteten Perioden dargestellt. Die absolute Größe hat hier keine Aussagekraft, doch der Vergleich zwischen zwei Laufzeiten liefert einen Eindruck davon wie stark sich die Bildaufnahmefrequenz auf den Gesamtrechenaufwand auswirkt.
 
-Um einen geeigneten Wert angeben zu können ist auch zu beachten, wie die Trajektorie des Roboters auf der Bühne verläuft. Sie hat einen entscheidenden Einfluss auf die Qualität der Lokalisation. Die verwendeten Fahrkurven zeigen, wie unterschiedlich sie auf verschiedene Bildaufnahmefrequenzen reagieren.
+Um einen geeigneten Wert angeben zu können ist auch zu beachten, wie die Trajektorie des Roboters auf der Bühne verläuft. Sie hat einen entscheidenden Einfluss auf die Qualität der Lokalisation. Die verwendeten Fahrkurven zeigen, wie unterschiedlich sie auf verschiedene Bildaufnahmefrequenzen reagieren. 
 \begin{table}[h]
 	\center
 	\caption{Laufzeit eines Simulationsdurchlaufs bei den verwendeten Perioden}
@@ -124,18 +109,28 @@ Um einen geeigneten Wert angeben zu können ist auch zu beachten, wie die Trajekt
 
 \section{Versuche zum Einfluss von Menschen auf der Bühne}
 \label{sec:VersucheCroud}
-In diesem Versuch soll untersucht werden, wie stark Menschen auf der Bühne die Lokalisation mit dem hier vorgestellten Verfahren stören. Dabei geht es im wesentlichen darum, dass Menschen im Bild stehen und so die Bit-Muster ganz oder teilweise verdecken. Wie bei den Versuchen zur Bildaufnahmefrequenz wird auch hier der mittlere Abstand zur wahren Roboterposition verwendet. Als Fahrkurven werden ebenfalls die in Abschnitt \ref{sec:Fahrkurven} beschriebenen verwendet. Die Art der Durchführung des Versuches wird nicht verändert. Es wird jedoch anstatt des Zeitintervalls die Anzahl der Personen auf der Bühne geändert (3,9,15,21). Das Zeitintervall für die Bildaufnahme wurde fest auf 1500\,$ms$ eingestellt.
+In diesem Versuch soll untersucht werden, wie stark Menschen auf der Bühne die Lokalisation mit dem hier vorgestellten Verfahren stören. Dabei geht es im wesentlichen darum, dass Menschen im Bild stehen und so die Bit-Muster ganz oder teilweise verdecken. Wie bei den Versuchen zur Bildaufnahmefrequenz wird auch hier der mittlere Abstand zur wahren Roboterposition verwendet. Als Fahrkurven werden ebenfalls die in Abschnitt \ref{sec:Fahrkurven} beschriebenen verwendet. Die Art der Durchführung des Versuches wird nicht verändert. Es wird jedoch anstatt des Zeitintervalls die Anzahl der Personen auf der Bühne geändert (3,9,15,21). Das Zeitintervall für die Bildaufnahme wurde fest auf 1500\,$ms$ eingestellt. Es gibt 23 festgelegte Positionen für Personen auf der Bühne. Aus diesen wird bei jedem Simulationslauf zufällig die benötigte Anzahl ermittelt. Auf Abbildung~\ref{fig:maxCrowd} sind die möglichen Positionen der Personen zu sehen. Wie in Abschnitt~\ref{sec:dieSzene} beschrieben sind die Personen 1800\,mm hoch und 400\,mm breit.
 
 \begin{wrapfigure}{o}{0.5\textwidth}
   	\center
     \includegraphics[width=0.45\textwidth]{chapter3/maxCrowd.png}
     \caption{Mögliche Positionen von Personen}
     \label{fig:maxCrowd}
+    \vspace{-18mm}
 \end{wrapfigure}
-Es gibt 23 festgelegte Positionen für Personen auf der Bühne. Aus diesen wird bei jedem Simulationslauf zufällig die benötigte Anzahl ermittelt. Auf Abbildung~\ref{fig:maxCrowd} sind die möglichen Positionen der Personen zu sehen. Wie in Abschnitt~\ref{sec:dieSzene} beschrieben sind die Personen 1800\,mm hoch und 400\,mm breit. Es ist davon auszugehen, dass je mehr Personen sich auf der Bühne befinden, es umso häufiger vorkommt, dass sie das Bit-Muster teilweise oder ganz verdecken. Bei einer hohen Personendichte sollte demnach der mittlere Abstand von der wahren Position größer werden. 
+Es ist davon auszugehen, dass je mehr Personen sich auf der Bühne befinden, es umso häufiger vorkommt, dass sie das Bit-Muster teilweise oder ganz verdecken. Bei einer hohen Personendichte sollte demnach der mittlere Abstand von der wahren Position größer werden. Möglicherweise ist die Lokalisation ab einer bestimmten Anzahl nicht mehr möglich.
+
+\subsection*{Ergebnisbeschreibung}
+
+
 \begin{figure}[h]
 	\centering
 	\input{chapter3/croudEffect/croudEffect.tex}
-	\caption{toller text}
+	\caption{Gemittelter Abstand von der Fahrkurve bei  mit vier verschiedenen Fahrkurven.}
 	\label{fig:croudEffectPlot}
 \end{figure}
+
+\subsection*{Ergebnisauswertung}
+
+\subsection*{Erkenntnisse zu Menschen auf der Bühne}
+
