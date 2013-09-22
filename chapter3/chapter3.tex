@@ -106,31 +106,39 @@ Um einen geeigneten Wert angeben zu können ist auch zu beachten, wie die Trajekt
 	\end{tabular}
 	\label{tab:laufzeit}
 \end{table}
-
+\vspace{-10mm}
 \section{Versuche zum Einfluss von Menschen auf der Bühne}
 \label{sec:VersucheCroud}
-In diesem Versuch soll untersucht werden, wie stark Menschen auf der Bühne die Lokalisation mit dem hier vorgestellten Verfahren stören. Dabei geht es im wesentlichen darum, dass Menschen im Bild stehen und so die Bit-Muster ganz oder teilweise verdecken. Wie bei den Versuchen zur Bildaufnahmefrequenz wird auch hier der mittlere Abstand zur wahren Roboterposition verwendet. Als Fahrkurven werden ebenfalls die in Abschnitt \ref{sec:Fahrkurven} beschriebenen verwendet. Die Art der Durchführung des Versuches wird nicht verändert. Es wird jedoch anstatt des Zeitintervalls die Anzahl der Personen auf der Bühne geändert (3,9,15,21). Das Zeitintervall für die Bildaufnahme wurde fest auf 1500\,$ms$ eingestellt. Es gibt 23 festgelegte Positionen für Personen auf der Bühne. Aus diesen wird bei jedem Simulationslauf zufällig die benötigte Anzahl ermittelt. Auf Abbildung~\ref{fig:maxCrowd} sind die möglichen Positionen der Personen zu sehen. Wie in Abschnitt~\ref{sec:dieSzene} beschrieben sind die Personen 1800\,mm hoch und 400\,mm breit.
-
 \begin{wrapfigure}{o}{0.5\textwidth}
+	\vspace{-10mm}
   	\center
     \includegraphics[width=0.45\textwidth]{chapter3/maxCrowd.png}
     \caption{Mögliche Positionen von Personen}
     \label{fig:maxCrowd}
-    \vspace{-18mm}
+    \vspace{-3mm}
 \end{wrapfigure}
+In diesem Versuch soll untersucht werden, wie stark Menschen auf der Bühne die Lokalisation mit dem hier vorgestellten Verfahren stören. Dabei geht es im wesentlichen darum, dass Menschen im Bild stehen und so die Bit-Muster ganz oder teilweise verdecken. Wie bei den Versuchen zur Bildaufnahmefrequenz wird auch hier der mittlere Abstand zur wahren Roboterposition verwendet. Als Fahrkurven werden ebenfalls die in Abschnitt \ref{sec:Fahrkurven} beschriebenen verwendet. Die Art der Durchführung des Versuches wird nicht verändert. Es wird jedoch anstatt des Zeitintervalls die Anzahl der Personen auf der Bühne geändert (0, 5, 10, 15, 20). Das Zeitintervall für die Bildaufnahme wurde fest auf 1500\,$ms$ eingestellt. Es gibt 23 festgelegte Positionen für Personen auf der Bühne. Aus diesen wird bei jedem Simulationslauf zufällig die benötigte Anzahl ermittelt. Auf Abbildung~\ref{fig:maxCrowd} sind die möglichen Positionen der Personen zu sehen. Wie in Abschnitt~\ref{sec:dieSzene} beschrieben sind die Personen 1800\,mm hoch und 400\,mm breit.
+
 Es ist davon auszugehen, dass je mehr Personen sich auf der Bühne befinden, es umso häufiger vorkommt, dass sie das Bit-Muster teilweise oder ganz verdecken. Bei einer hohen Personendichte sollte demnach der mittlere Abstand von der wahren Position größer werden. Möglicherweise ist die Lokalisation ab einer bestimmten Anzahl nicht mehr möglich.
 
 \subsection*{Ergebnisbeschreibung}
-
+In Abbildung \ref{fig:croudEffectPlot} sind die Ergebnisse dieses Versuchs dargestellt. Der gemittelte Abstand für 0 Personen auf der Bühne entspricht dem des vorangegangenen Versuchs (bei 1500\,$ms$). Bei einer Zunahme der Personenanzahl, lässt sich ein sehr leichter Anstieg des mittleren Abstandes im Bereich 0~bis~15 Personen für die \textbf{Schlangenlinien}, \textbf{Loop~Clockwise} und der \textbf{Loop~Anticlockwise} erkennen. Für den Schritt von 15 auf 20 Personen ist, für diese drei Fahrkurven, eine stärkere Zunahme zu beobachten. Für die Fahrkurve der \textbf{Ellipse} liegt der Wert des mittleren Abstandes für 5 Personen unter dem einer Bühne ohne Personen. Eine Abnahme, bei steigender Personenzahl, ist nochmals zwischen 15 und 20 Personen zu erkennen. Den größten mittleren Abstand, über alle betrachteten Personenzahlen, weist die \textbf{Ellipse} auf, gefolgt von den \textbf{Schlangenlinien}, \textbf{Loop~Anticlockwise} und \textbf{Loop~Clockwise} (in der Reihenfolge). 
 
 \begin{figure}[h]
 	\centering
 	\input{chapter3/croudEffect/croudEffect.tex}
-	\caption{Gemittelter Abstand von der Fahrkurve bei  mit vier verschiedenen Fahrkurven.}
+	\caption[Mittlerer Abstand über Personenanzahl]{Gemittelter Abstand von der Fahrkurve bei einer Steigenden Anzahl von Personen auf der Bühne, vier unterschiedliche Fahrkurven}
 	\label{fig:croudEffectPlot}
 \end{figure}
 
 \subsection*{Ergebnisauswertung}
+Über alle Fahrkurven betrachtet, steigt der mittlere Abstand zur wahren Position des Roboters mit wachsender Personenzahl. Die Ergebnisse für die \textbf{Schlangenlinien}, \textbf{Loop~Clockwise} und \textbf{Loop~Anticlockwise} verhalten sich dabei sehr ähnlich. Für die \textbf{Ellipse} sind die Ergebnisse ungewöhnlich, da der Abstand an zwei Stellen, entgegen der Erwartung sinkt. Insbesondere beim Schritt von 0 zu 5 Personen, kann dies nur durch die zufälligen Unsicherheiten der Simulation erklärt werden. Sie werden für jeden Durchlauf neu bestimmt. Daher wäre es denkbar, das unter den 15 Durchläufen mit 0 Personen zufällig schlechtere Bedingungen entstanden als dies bei den 15 Durchläufen mit 5 Personen der Fall war. Dieser Umstand könnte auch zu der Abnahme zwischen 15 und 20 Personen beigetragen haben. Für diese zweite Abnahme könnte zusätzlich die Zufällige Ziehung der Position von Personen eine mögliche Ursache sein. Abhängige von der Fahrkurve lassen sich die Positionen in zwei Gruppen gliedern:
+
+\textbf{Positionen die das Mess-Update stören} sind alle Punkte auf der Bühne, an denen eine Person zwischen Kamera und Bit-Muster steht.
+
+\textbf{Positionen die das Mess-Update nicht beeinflussen} sind Punkte auf der Bühne, die zu keinem Zeitpunkt auf der Fahrkurve zwischen Kamera und Bit-Muster stehen.
+
+Bei den Ziehungen für 15 Durchläufe aus der Menge möglicher Positionen wäre es möglich überproportional viele störende oder nicht störende zu wählen. Denkbar wäre, dass das Ergebnis für die \textbf{Ellipse} bei 15 Personen zu hoch, oder bei 20 Personen zu niedrig ausfällt. 
 
 \subsection*{Erkenntnisse zu Menschen auf der Bühne}
-
+Die in diesem Versuch verwendeten 15 Simulationsläufe pro Fahrkurve und Personenanzahl sind zu klein angesetzt worden. Es lässt sich die Aussage treffen, dass eine größere Personenzahl auf der Bühne die Lokalisation zwar stört, nicht jedoch zu einem Ausfall der Lokalisation geführt hat. Kritisch sind die verwendeten Positionen der Personen auf der Bühne zu betrachten. Sie sind in einem gleichmäßigen Muster auf der Bühne verteilt. Diese Anordnung ist für einen Anwendungsfall unrealistisch, die Verteilung hätte zufälliger gestreut werden müssen. Dieses Vorgehen wurde jedoch zunächst nicht gewählt, da es die Anzahl der nötigen Versuchsdurchläufe erheblich erhöht hätte.
