@@ -116,22 +116,22 @@ In der Simulationssoftware lassen sich bestimmte Parameter verändern, um ihr Ver
 \item[takepicture intervall](3000) Zeit in Millisekunden zwischen zwei Kamerabildern. Dabei wird \textbf{loop~target~time} verwendet um zu bestimmen wie viele Simulationsschritte der Zeitangabe entsprechen.
 \item[loop target time](33333) Zeit in Mikrosekunden die einem Simulationsschritt entspricht. Der default wert entspricht 30 Schritte pro Sekunde.
 \item[crowd size](0)	Stellt ein wie viele Personen auf der Bühne sein sollen. Mögliche sind 0 bis 23 Personen.
-\item[particle visibility ratio](1) Dies stellt ein wie viele Partikel visualisiert werden. Es beeinflusst die Simulation nicht und dient nur dem Bediener um das Partikelverhalten sehen zu können. Der Wert ist als Teiler zu verstehen, 1 bedeutet alle Partikel werden visualisiert während 10 nur ein Zehntel darstellt. 
 \item[sys error on](true) Mit diesem Flag kann der Systematische Fehler ein- oder ausgeschaltet werden.
+\item[particle visibility ratio](1) Dies stellt ein wie viele Partikel visualisiert werden. Es beeinflusst die Simulation nicht und dient nur dem Bediener um das Partikelverhalten sehen zu können. Der Wert ist als Teiler zu verstehen, 1 bedeutet alle Partikel werden visualisiert während 10 nur ein Zehntel darstellt. 
 \item[camera picture width](1280) Gibt die Bildauflösung der Simulierten Kamera an.
 \item[camera picture height](720) Gibt die Bildauflösung der Simulierten Kamera an.
 \item[field of view horizontal](74) Dies stellt den horizontalen Öffnungswinkel der Kamera ein.
 \item[blind mode on](false) Dieses Flag deaktiviert zwei Fenster  der Simulation mit denen ein Bediener die Vorgänge beobachten kann. Dies ist sinnvoll, wenn automatisiert viele Simulationsdurchläufe durchgeführt werden sollen.
-\item[robParameter.kDistanceLeftWheel](0.35) Abstand linkes Rad zum Robotermitte
-\item[robParameter.kDistanceRightWheel](0.35) Abstand rechtes Rad zum Robotermitte
-\item[robParameter.kLeftWheelWidth](0.03) Dicke linkes Rad
-\item[robParameter.kRightWheelWidth](0.03) Dicke rechtes Rad
-\item[robParameter.kRadiusWheelRight](0.08) Rechter Radradius 
-\item[robParameter.kRadiusWheelLeft](0.08) Linker Radradius
-\item[robParameter.kImpulePerTurn](2000) Encoder-Auflösung pro Umdrehung
-\item[robParameter.kTransmissionKoefficent](14.5) Faktor zwischen Raddrehung und Motorwelle
-\item[robParameter.kPsiSpeed](0.05) Winkeländerung bei Drehung pro Schritt
-\item[robParameter.kSigmaIncrement](0.05) Koeffizient für gaußsches Rauschen der Encoder-Werte
-\item[robParameter.kSigmaRadius](0.003) Koeffizient für systematischen Radiusabweichung.
-\item[robParameter.kSpeed](0.05) Strecke die pro Simulationsschritt zurückgelegt wird.
+\item[kDistanceLeftWheel](0.35) Abstand linkes Rad zum Robotermitte
+\item[kDistanceRightWheel](0.35) Abstand rechtes Rad zum Robotermitte
+\item[kLeftWheelWidth](0.03) Dicke linkes Roboter Rad
+\item[kRightWheelWidth](0.03) Dicke rechtes Roboter Rad
+\item[kRadiusWheelRight](0.08) Rechter Radradius 
+\item[kRadiusWheelLeft](0.08) Linker Radradius
+\item[kImpulePerTurn](2000) Encoder-Auflösung pro Umdrehung
+\item[kTransmissionKoefficent](14.5) Übersetzungsverhältnis von einer Raddrehung zur Anzahl der Drehungen der Motorwelle
+\item[kPsiSpeed](0.05) Winkeländerung bei Drehung des Roboters pro Simulationsschritt
+\item[kSigmaIncrement](0.05) Koeffizient für gaußsches Rauschen der Encoder-Werte
+\item[kSigmaRadius](0.003) Koeffizient für systematischen Radiusabweichung.
+\item[kSpeed](0.05) Strecke die der Roboter pro Simulationsschritt zurückgelegt.
 \end{description}
